@@ -1,0 +1,922 @@
+/*
+Theme Name: Digital Newspaper Child
+Theme URI: https://blazethemes.com/theme/digital-newspaper-free/
+Template: digital-newspaper
+Author: BlazeThemes
+Author URI: https://blazethemes.com/
+Description: Digital Newspaper is now here to captivate WordPress website owners with unprecedented features you shall only find here first. The main banner has a professional 3 columns design that’s best suitable for news sites. It comes with 7 front sections with 7 different news block layouts and 9 custom Digital Newspaper widgets. You will get to choose separate colors and designs for all main elements of the page at both the initial and hover states. There are typography controls (5 font families, and font-weight) for Site title, Navigation Menu, Block Title, Post Title, Post Meta, Post Content, Archive, and Single Post. The theme provides custom breadcrumb trail options for popular plugins - Breadcrumb NavXT, Yoast SEO, and Rank Math SEO plugin. You will get a welcome dilemma in having to choose between 5 front page sidebar layouts, 5 archive sidebar layouts, 5 post sidebar layouts, 5 page sidebar layouts with sticky option in each layout, and 2 basic archive layouts. Also, the header section can be made sticky upon scrolling up and the theme has a scroll-to-top button. Enjoy the preference to select between boxed and full-width layouts in all sections. Available with 4+ pre-built starter websites, that you will get to install in one click. Demo link: https://doc.blazethemes.com/digital-newspaper/ Video tutorial: https://www.youtube.com/watch?v=h1aumrJXlyY
+Tags: news,blog,entertainment,one-column,two-columns,grid-layout,block-styles,left-sidebar,right-sidebar,custom-header,flexible-header,custom-background,custom-colors,custom-menu,featured-images,full-width-template,post-formats,sticky-post,rtl-language-support,footer-widgets,theme-options,threaded-comments,translation-ready
+Version: 1.1.17.1762980387
+Updated: 2025-11-12 20:46:27
+
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+  --font-family-base: 'Sora', sans-serif;
+  --font-family-body: "Lora", serif;
+  --main-color: #000000;
+  --font-body-size: 17px;
+  --font-body-line-height: 30px;
+  --font-entrada-size: 22px;
+  --font-entrada-line-height: 30px;
+  --font-T1-2: 34px;
+  --font-line-height-T1-2: 38px;
+  --font-weight-T1-2: 600;
+  --small-text-font: 0.8rem;
+}
+
+body {
+  font-family: var(--font-family-base) !important;
+}
+
+.site-header.layout--default .top-header {
+  background: var(--main-color) !important;
+}
+
+.main-navigation .menu li a,
+.main-navigation .nav.menu li a {
+  font-family: var(--font-family-base) !important;
+  font-size: 14px !important;
+  font-weight: 300 !important;
+}
+
+/*TITULO das seccoes na homepage*/
+.digital-newspaper-block-title {
+  font-family: var(--font-family-base) !important;
+  font-size: 2rem !important;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+/* Border and text color use CSS variable */
+h2.digital-newspaper-block-title {
+  margin-bottom: 0px !important;
+  border-bottom: 2px solid var(--section-title-color) !important;
+}
+
+.digital-newspaper-block-title span,
+.digital-newspaper-block-title span a {
+  color: var(--section-title-color) !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+
+/**
+* Update font-family
+*/
+.post-title a,
+.post-categories a,
+.post-meta span,
+.post-meta time {
+  font-family: var(--font-family-base) !important;
+}
+
+.post-excerpt p {
+  font-family: var(--font-family-body) !important;
+}
+
+/**
+* MOSTRAR O NOME DO AUTOR NO MAIN BANNER DA HOMEPAGE
+*/
+.main-banner-wrap .post-meta .byline,
+.main-banner-wrap .post-meta .author.vcard {
+  display: inline !important;
+  visibility: visible !important;
+}
+
+/**
+* RETIRAR ANIMAÇÃO MANHOSA DOS posts da homepage
+*/
+.banner-layout--six .row .main-banner-trailing-posts figure.post-thumb .post-element-wrap {
+  transform: translateY(0) !important;
+  transition: none !important;
+}
+
+
+/**
+* Mostrar todas as infos dos posts da homepage
+*/
+.banner-layout--six .row .main-banner-trailing-posts figure.post-thumb .post-element-wrap .post-meta {
+  opacity: 100% !important;
+}
+
+/**
+* Tirar padding das caixas da homepage
+
+.home.blog #theme-content .row .primary-content article .blaze_box_wrap {
+  padding: 0px !important;
+}*/
+
+
+/**
+* Passar para 3 colunas
+*/
+.primary-content {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+
+/* Force posts inside news-list-wrap to appear in 3 columns */
+/**
+* limitar as tres colunas para desktop
+*/
+@media screen and (min-width: 840px) {
+  .news-list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* ajusta se quiseres */
+  }
+
+  .news-list-wrap>article.post {
+    flex: 0 0 33.333% !important;
+    max-width: 33.333% !important;
+  }
+
+  .news-list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    /* já deve ter */
+    justify-content: flex-start;
+    /* garante que os items começam na esquerda */
+    gap: 0;
+    /* ou define gap desejado */
+  }
+
+  .news-list-wrap>article {
+    flex: 0 0 33.333%;
+    /* ocupa 1/3 */
+    max-width: 33.333%;
+    box-sizing: border-box;
+    /* inclui padding e border na largura */
+  }
+
+}
+
+/**
+* HOMAPAGE 3 COLLUMN SECTION TURNS INTO 1 COLUMN
+*/
+@media screen and (max-width: 840px) {
+  .news-list-wrap {
+    display: block !important;
+  }
+
+  .news-list-wrap>article {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+
+  .primary-content .news-list-wrap article {
+    display: block !important;
+  }
+
+  .top-main-banner-item .post-thumb img {
+    max-height: 800px;
+  }
+}
+
+.digital-newspaper-section.banner-layout--six {
+  padding-top: 15px !important;
+}
+
+/**
+* TOP IMAGEM HOMAPAGE
+*/
+/* CONTAINER igual ao Main Banner */
+.top-main-banner-wrap {
+  width: 100%;
+  margin: 0 auto 20px auto;
+  position: relative;
+}
+
+/* A imagem ocupa 100% */
+.top-main-banner-item .post-thumb img {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  /* muda para o valor que pretendes */
+  object-fit: cover;
+  display: block;
+}
+
+/* Post-element igual ao main banner overlay */
+.top-main-banner-item .post-element {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px !important;
+  width: 100%;
+  color: white;
+  z-index: 5;
+}
+
+/* Gradient escuro igual ao main banner */
+.top-main-banner-item .post-element::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, .85) 100%);
+  z-index: -1;
+}
+
+/* Título igual ao main banner */
+.top-main-banner-item .post-title a {
+  color: #fff !important;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Meta igual ao main banner */
+.top-main-banner-item .post-meta span,
+.top-main-banner-item .post-meta a {
+  color: #fff !important;
+}
+
+/* Excerpt */
+.top-main-banner-item .post-excerpt {
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 10px;
+  max-width: 700px;
+}
+
+/*Retirar o estilo de links aos titulos da seccoes da homepage*/
+.my-main-banner-title a {
+  color: inherit;
+  /* usa a cor normal do título */
+  text-decoration: none;
+  /* remove underline */
+}
+
+.my-main-banner-title a:hover {
+  text-decoration: none;
+  /* mantém sem underline no hover */
+  opacity: 0.85;
+  /* ou muda isto se quiseres outro efeito */
+}
+
+/**
+* VIDEOS NA HOMEPAGE ARTICLE LAYOUT
+*/
+.news-carousel .carousel-item .carousel-inner-wrapper {
+  width: 100%;
+}
+
+.news-carousel .carousel-item article.post {
+  margin-bottom: 0;
+}
+
+.news-carousel .carousel-item .blaze_box_wrap {
+  height: 100%;
+}
+
+
+/**
+* BG COLOR DO CAROUSEL: videos e podcasts
+*/
+#bottom-full-width-section {
+  background-color: #fff !important;
+}
+
+
+/***
+* SECCAO HOMEPAGE 4 COLUNAS
+*/
+/* Wrap uses grid instead of the default layout */
+.news-list-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* Make sure article boxes behave in grid */
+/* Fix Digital Newspaper forcing two columns */
+.news-list-4col article.post,
+.news-list-4col article {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+/* Ensure internal wrappers do not limit width */
+.news-list-4col .blaze_box_wrap,
+.news-list-4col .post-thumb-wrap,
+.news-list-4col .post-element {
+  width: 100% !important;
+}
+
+/* Your 4-column grid */
+.news-list-4col {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 5px;
+}
+
+
+@media (max-width: 1024px) {
+  .news-list-4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .news-list-4col {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/**
+* Tirar o padding to texto dos artigos da homepage
+*/
+
+.post-element {
+  padding: 0px !important;
+  padding-top: 10px !important;
+}
+
+.dn-narrow-wrap {
+  max-width: 700px;
+  /* or 500px */
+  width: 100%;
+  margin-left: 0;
+  /* stick to left */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/**
+* PADDING DOS ARTIGOS CONTENT
+*/
+body.post-layout--two #theme-content .primary-content .news-list-wrap article {
+  padding: 0px !important;
+}
+
+/***
+* TAMANHO DO TITULO DE UMA PAGINA SECCAO
+*/
+h3.my-main-banner-title {
+  font-size: 40px !important;
+  border-bottom: 2px solid var(--section-title-color) !important;
+  margin-bottom: 10px;
+}
+
+/**
+* COLUNA TEXTO ARTIGO ALONE
+*/
+.single-collumn {
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/**
+* FONT-FAMILY SINGLE ARTIGO
+**/
+.single .post-inner .entry-content {
+  font-family: var(--font-family-body) !important;
+  font-size: var(--font-body-size) !important;
+  line-height: var(--font-body-line-height) !important;
+}
+
+/** ARTIGO ENTRADA FONT */
+.single .post-inner .entry-content strong {
+  font-family: var(--font-family-body) !important;
+  font-size: var(--font-entrada-size) !important;
+  line-height: var(--font-entrada-line-height) !important;
+  font-weight: 300;
+}
+
+/**. ARTIGO TITULO FONT*/
+.entry-title {
+  font-family: var(--font-family-base) !important;
+  font-size: var(--font-T1-2) !important;
+  line-height: var(--font-line-height-T1-2) !important;
+  font-weight: var(--font-weight-T1-2) !important;
+}
+
+/**ARTIGO META FONT*/
+.single .entry-header .entry-meta a,
+.single .entry-header .entry-meta span {
+  font-family: var(--font-family-base) !important;
+  font-size: var(--small-text-font) !important;
+}
+
+/** FONT COMENTARIOS */
+.comment-respond h3 {
+  font-family: var(--font-family-base) !important;
+}
+
+.comment-form .form-submit input {
+  font-family: var(--font-family-base) !important;
+}
+
+/* Extra padding ONLY for the main banner big story */
+.banner-layout--six .main-banner-wrap .slide-item .post-element {
+  padding: 20px 20px 25px !important;
+  /* top right bottom left */
+}
+
+/* Extra padding ONLY for the top homepage main story */
+.top-main-banner-wrap .top-main-banner-item .post-element {
+  padding: 20px 40px 25px !important;
+  /* top right bottom left */
+}
+
+/** PODS AND VIDS SECTION BG DARK*/
+/* Background block for podcasts & videos sections */
+.pods-vids-BG {
+  background-color: #171717;
+  /* <<< the color you actually want */
+}
+
+/**
+* ENTRY DO ARTIGO*/
+/* SINGLE POST – HEADER: IMAGE LEFT, TEXT RIGHT */
+.single .entry-header.entry-header--with-thumb .entry-header-inner {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+/* Left column: image */
+.single .entry-header.entry-header--with-thumb .entry-header-media {
+  flex: 0 0 50%;
+}
+
+.single .entry-header.entry-header--with-thumb .entry-header-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Right column: category, title, meta */
+.single .entry-header.entry-header--with-thumb .entry-header-content {
+  flex: 1;
+}
+
+/* Optional: reduce bottom margin on header so it sticks closer to body */
+.single .entry-header.entry-header--with-thumb {
+  margin-bottom: 30px;
+}
+
+@media (max-width: 1200px) {
+  .single .entry-header.entry-header--with-thumb .entry-header-inner {
+    display: flex;
+    flex-direction: column-reverse; /* <— invert order */
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .single .entry-header.entry-header--with-thumb .entry-header-media,
+  .single .entry-header.entry-header--with-thumb .entry-header-content {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+
+
+
+h3.my-main-banner-title {
+  margin-bottom: 0px !important;
+}
+
+.digital-newspaper-container {
+  padding-top: 10px !important;
+}
+
+.entry-lead {
+  font-family: var(--font-family-body) !important;
+  font-size: var(--font-entrada-size) !important;
+  line-height: var(--font-entrada-line-height) !important;
+  font-weight: 300;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+/**
+* META NEXT TO CATEGORY IN HEADER OF ARTICLE
+*/
+.meta-header-post {
+  display: flex;
+  justify-content: space-between;
+  /* left + right */
+  align-items: center;
+  gap: 10px;
+  /* optional spacing between cats and meta */
+}
+
+/* just to avoid weird margins from theme defaults */
+.meta-header-post .entry-meta {
+  margin: 0;
+}
+
+/**
+* BORDER BLACK ARTIGO BOTTOM
+*/
+.single .entry-header-inner {
+  border-bottom: 0.5px solid #000;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+/**
+* PRIMEIRA LETRA BODY ARTIGO
+*/
+/* Primeira letra do primeiro parágrafo do artigo (single) */
+/* DROP CAP no primeiro parágrafo do artigo (single) */
+/* DEBUG: ver se estou a apanhar o 1.º parágrafo */
+/* DROP CAP no 2.º parágrafo direto dentro de .entry-content */
+.single .post-inner .entry-content.single-collumn>p:first-of-type::first-letter {
+  float: left;
+  font-size: 86px;
+  /* ajusta até ocupar ~3 linhas */
+  line-height: 1;
+  font-weight: 600;
+  padding-right: 8px;
+  padding-top: 4px;
+}
+
+/**
+* COR DA TAG NO ARTIGO
+**/
+/* Override parent rule so it doesn't force red on singles */
+.single .entry-header .post-categories li {
+  /* no background-color here on purpose */
+  border-radius: 3px;
+  line-height: var(--single-meta-lineheight);
+  font-weight: var(--single-meta-weight);
+  font-family: var(--single-meta-family);
+  margin: 0 5px 5px 0;
+}
+
+
+/**
+* AUTORES E COLUNA DE TEXTO, ARTIGO
+**/
+/* Wrapper: 3 colunas -> [ESQ autores] [CENTRO texto] [DIR vazio] */
+.single .single-layout-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: 2rem;
+}
+
+/* Coluna de texto continua a ser uma coluna centrada */
+.single .entry-content.single-collumn {
+  grid-column: 2;
+  /* coluna do meio */
+  max-width: 720px;
+  /* ajusta para a largura que já usavas */
+  justify-self: center;
+  /* garante que o texto fica mesmo centrado no meio */
+}
+
+/* Coluna dos autores ocupa o espaço à esquerda */
+.single .single-authors-column {
+  grid-column: 1;
+  /* primeira coluna (lado esquerdo) */
+  width: 100%;
+  /* preenche o espaço dessa coluna */
+  align-self: start;
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
+
+.single .single-authors-title {
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Se a tua função digital_newspaper_posted_by gera .byline e .author_name */
+.single .single-authors-list .byline {
+  display: block;
+}
+
+.single .single-authors-list .author_name {
+  display: inline-block;
+  margin-bottom: 0.10rem;
+}
+
+/* Responsivo: em ecrãs pequenos, empilha tudo (autores em cima, texto em baixo) */
+@media (max-width: 1200px) {
+  .single .single-layout-wrapper {
+    display: block;
+  }
+
+  .single .single-authors-column {
+    width: auto;
+    margin-bottom: 1.5rem;
+    display: flex;
+  justify-content: center;
+  }
+}
+
+.p {
+  margin-top: 0px;
+}
+
+.page-content,
+.entry-content,
+.entry-summary {
+  margin: 0px !important;
+}
+
+.single-authors-title {
+  font-size: var(--small-text-font);
+  font-weight: 400 !important;
+  color: #171717 !important;
+}
+
+/** TIRAR ICONE DE AUTORES */
+span.author_name:before,
+a.author_name::before {
+  content: none !important;
+}
+
+/* Remove ONLY the icon before the author meta (first item in entry-meta) */
+.single .entry-meta>span:first-child::before,
+.single .entry-meta .byline::before {
+  content: '' !important;
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+a:visited {
+  color: inherit !important;
+}
+
+/* A coluna dos autores organiza POR + autores em linha com wrap */
+.single .single-authors-column {
+  display: flex;
+  flex-wrap: wrap;
+  /* quando não couber mais, salta para a linha de baixo */
+  gap: 0.4rem;
+  align-items: baseline;
+}
+
+/* Esse <p> vazio ocupa uma linha inteira (ou remove-o em PHP se não precisares) */
+.single .single-authors-column p.has-medium-font-size {
+  flex-basis: 100%;
+  margin: 0 0 0.5rem;
+}
+
+/* "POR" na mesma linha dos autores */
+.single .single-authors-title {
+  flex: 0 0 auto;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* O bloco com os autores fica ao lado do "POR" e também pode quebrar */
+.single .single-authors-list {
+  flex: 0 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Dentro da lista, a .byline já estava a ser usada para flex dos autores */
+.single .single-authors-list .byline {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Cada autor */
+.single .single-authors-list .author {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  /* mantém o nome de cada autor numa só linha */
+  font-weight: 500;
+}
+
+
+.single-authors-row {
+  display: flex;
+  gap: 0.4rem;
+  text-transform: uppercase;
+  font-size: var(--small-text-font);
+}
+
+.entry-meta {
+  margin-bottom: 0 !important;
+}
+
+.single .entry-header .entry-meta>span {
+  margin-right: 0 !important;
+}
+
+.single .entry-header .post-categories li {
+  margin: 0 !important;
+}
+
+
+/**
+* RELATED POSTS
+*/
+/* Same grid & spacing as homepage, but only inside the related block on singles */
+.single .single-related-posts-section .news-list-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  /* space between cards */
+  margin-top: 20px;
+  /* gap between title and first row of posts */
+}
+
+.single .single-related-posts-section .news-list-wrap>article {
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+  /* vertical spacing */
+}
+
+/* Hover effect like homepage */
+.single .single-related-posts-section .news-list-wrap .post-thumb-wrap img {
+  transition: transform 0.3s ease;
+}
+
+.single .single-related-posts-section .news-list-wrap>article:hover .post-thumb-wrap img {
+  transform: scale(1.03);
+}
+
+/** TAGS SINGLE POST */
+.tags-links {
+  text-transform: uppercase;
+  font-size: var(--small-text-font);
+}
+
+.entry-footer .tags-links a {
+  background-color: transparent !important;
+  text-decoration: underline;
+  color: #000 !important;
+}
+
+/** TAGS */
+.entry-footer {
+  font-family: var(--font-family-base);
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  padding: 8px 0; /* optional, just for breathing room */
+}
+
+
+.single-tags-label {
+    font-size: var(--small-text-font);
+    font-weight: 700;
+    display: inline-flex;   /* inline-flex is nicer for a label */
+    justify-content: center; /* horizontal */
+    align-items: center;     /* vertical */
+}
+
+.post-meta{
+    display: flex;              /* fica em row por padrão */
+  flex-direction: row;
+  justify-content: space-between; /* um item encostado à esquerda e o outro à direita */
+  align-items: center; 
+}
+
+.smaller-tittle {
+  font-size: 13px;
+}
+
+a.white-font:visited{
+  color:#fff !important;
+}
+
+.white-font a{
+  color:#fff !important;
+}
+
+
+/** TEXTO ARTIGO */
+.has-legenda-font-size {
+  font-size: var(--small-text-font);
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.has-corpo-texto-font-size {
+  font-size: var(--font-body-size);
+  line-height:  var(--font-body-line-height);
+  font-family: var(--font-family-body);
+  font-weight: 400;
+}
+
+.has-titulo-font-size {
+  font-size: 20px;
+  line-height: 28px;
+  font-family: var(--font-family-body);
+  font-weight: 700;
+}
+
+.has-destaque-font-size {
+  font-size: 24px;
+  line-height: 30px;
+  font-family: var(--font-family-body);
+  font-weight: 700;
+}
+
+/* Base caption style */
+.entry-content figure.wp-block-image figcaption {
+  font-size: var(--small-text-font);
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 15px;
+}
+
+/* Reset ANY bold rules inside the caption and make it match */
+.single .entry-content figure.wp-block-image figcaption strong,
+.single .entry-content figure.wp-block-image figcaption b {
+  all: unset;
+  display: inline;
+  font-size: inherit !important;
+  font-family: inherit !important;
+  text-transform: inherit !important;
+  line-height: inherit !important;
+  font-weight: 500 !important;
+}
+
+/** MENU COM LOGO EM CIMA */
+/* Desktop: no layout THREE, empilhar logo + menu em coluna */
+
+@media (min-width: 1024px) {
+  /* A row que contém logo + menu passa de row para coluna */
+  .site-header.layout--three .site-branding-section .digital-newspaper-container .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* se quiseres tudo centrado; usa flex-start para ficar à esquerda */
+  }
+
+  /* Logo: espaço por baixo e centrado */
+  .site-header.layout--three .site-branding {
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Menu: ocupa a largura toda e fica centrado */
+  .site-header.layout--three .main-navigation {
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  /* Se o menu usar flex, garantir que os itens ficam centrados */
+  .site-header.layout--three .main-navigation ul {
+    justify-content: center;
+  }
+}
+
+
+@media (min-width: 1024px) {
+  /* Centro absoluto do bloco site-branding */
+  .site-header.layout--three .site-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* centra tudo dentro do bloco */
+    justify-content: center;
+    margin: 0 auto 1rem;   /* centra o próprio bloco na linha */
+    text-align: center;
+    width: auto;           /* ou 100% se quiseres ocupar tudo */
+  }
+
+  /* Se o logo tiver a class default do WP */
+  .site-header.layout--three .site-branding .custom-logo-link {
+    margin: 0 auto;
+    display: inline-block;
+  }
+}
+
+/* LOGO SIZE */
+@media (min-width: 1024px) {
+  .site-header.layout--three .site-branding .custom-logo {
+    max-height: 80px !important;
+    height: auto;
+    width: auto;
+  }
+}
+
+/** HEADER SPACING */
+header.site-header {
+  padding-bottom: 0 !important;
+}
+

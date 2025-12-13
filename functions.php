@@ -1,0 +1,569 @@
+<?php
+// Exit if accessed directly
+if (!defined('ABSPATH'))
+    exit;
+
+// BEGIN ENQUEUE PARENT ACTION
+// AUTO GENERATED - Do not modify or remove comment markers above or below:
+
+if (!function_exists('chld_thm_cfg_locale_css')):
+    function chld_thm_cfg_locale_css($uri)
+    {
+        if (empty($uri) && is_rtl() && file_exists(get_template_directory() . '/rtl.css'))
+            $uri = get_template_directory_uri() . '/rtl.css';
+        return $uri;
+    }
+endif;
+add_filter('locale_stylesheet_uri', 'chld_thm_cfg_locale_css');
+
+if (!function_exists('chld_thm_cfg_parent_css')):
+    function chld_thm_cfg_parent_css()
+    {
+        wp_enqueue_style('chld_thm_cfg_parent', trailingslashit(get_template_directory_uri()) . 'style.css', array('fontawesome', 'slick'));
+    }
+endif;
+add_action('wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10);
+
+// END ENQUEUE PARENT ACTION
+
+
+
+/**
+ * ADD TITLE TO LISBOA, CIDADE ABERTA
+ */
+add_action('digital_newspaper_main_banner_hook', function () {
+    get_template_part('inc/section_title', null, [
+        'title' => 'Lisboa, Cidade Aberta',
+        'link' => '/category/lisboacidadeaberta/'
+    ]);
+
+}, 10);
+
+
+
+/**
+ * DATA
+ * Remover o "ago" do timestamp
+ */
+add_filter('digital_newspaper_inherit_published_date', function ($date) {
+    // Remove a palavra 'ago' se estiver presente
+    $date = str_ireplace('ago', '', $date);
+    return trim($date);
+});
+
+// Permitir itálico em títulos usando *palavra*
+add_filter('the_title', function ($title, $id) {
+
+    // impedir que apareça HTML no painel
+    if (is_admin())
+        return $title;
+
+    // encontra texto entre *asteriscos* e transforma em <em>
+    $title = preg_replace('/\*(.*?)\*/', '<em>$1</em>', $title);
+
+    return $title;
+
+}, 10, 2);
+
+
+/**
+ * CONTRAST OF TAG
+ */
+if ( ! function_exists( 'digital_newspaper_get_contrast_color' ) ) {
+    function digital_newspaper_get_contrast_color( $hexcolor ) {
+        $hexcolor = ltrim( $hexcolor, '#' );
+
+        // Short hex (#abc)
+        if ( strlen( $hexcolor ) === 3 ) {
+            $r = hexdec( str_repeat( substr( $hexcolor, 0, 1 ), 2 ) );
+            $g = hexdec( str_repeat( substr( $hexcolor, 1, 1 ), 2 ) );
+            $b = hexdec( str_repeat( substr( $hexcolor, 2, 1 ), 2 ) );
+        } else {
+            $r = hexdec( substr( $hexcolor, 0, 2 ) );
+            $g = hexdec( substr( $hexcolor, 2, 2 ) );
+            $b = hexdec( substr( $hexcolor, 4, 2 ) );
+        }
+
+        // YIQ – decide if background is light or dark
+        $yiq = ( ( $r * 299 ) + ( $g * 587 ) + ( $b * 114 ) ) / 1000;
+
+        // light bg → black text, dark bg → white text
+        return ( $yiq >= 128 ) ? '#000000' : '#ffffff';
+    }
+}
+
+
+
+/***
+ * TAGS em vez de CATEGORIAS
+ */
+if (!function_exists('digital_newspaper_get_post_categories')):
+    /**
+     * Show first tag but using the category color
+     */
+    function digital_newspaper_get_post_categories($post_id, $number)
+    {
+
+        // Get FIRST CATEGORY (for class only)
+        $categories      = get_the_category($post_id);
+        $cat_color_class = '';
+
+        if (!empty($categories)) {
+            $main_cat        = $categories[0];
+            $cat_color_class = 'cat-' . $main_cat->term_id; // bg continua a vir do CSS
+        }
+
+        // FIRST TAG (for text)
+        $tags = get_the_tags($post_id);
+
+        if ($tags && !is_wp_error($tags)) {
+            $first_tag = $tags[0];
+
+            // 🔥 hard-code white text (não mexe no background)
+            $a_style = ' style="color:#ffffff !important;"';
+
+            echo '<ul class="post-categories">';
+            echo '<li class="cat-item ' . esc_attr($cat_color_class) . '">'; // sem inline background
+            echo '<a href="' . esc_url(get_tag_link($first_tag->term_id)) . '" rel="tag"' . $a_style . '>';
+            echo esc_html($first_tag->name);
+            echo '</a>';
+            echo '</li>';
+            echo '</ul>';
+        }
+    }
+endif;
+
+
+
+
+/***
+ * GET CATEGORY COLOR
+ */
+/**
+ * Get the CSS color assigned to a category (Digital Newspaper theme)
+ */
+use Digital_Newspaper\CustomizerDefault as DN;
+
+function dlx_get_category_color($cat_id)
+{
+
+    // Get the stored category color entry
+    $color_data = DN\digital_newspaper_get_customizer_option(
+        'category_' . absint($cat_id) . '_color'
+    );
+
+    echo 'color_data = ' . $color_data[0];
+
+    if (!is_array($color_data) || empty($color_data['color'])) {
+        return false;
+    }
+
+    $raw = $color_data['color']; // might be CSS variable
+
+    // Convert variable → hex
+    $resolved = dlx_resolve_global_color_var($raw);
+
+    // Return the hex or fallback
+    return $resolved ?: false;
+}
+
+
+
+
+function dlx_resolve_css_var_to_hex($css_var)
+{
+    if (empty($css_var))
+        return false;
+
+    // Only process CSS variables
+    if (strpos($css_var, '--') !== 0)
+        return $css_var;
+
+    // Find the variable inside all registered styles
+    global $wp_styles;
+
+    foreach ($wp_styles->registered as $style) {
+        $src = $style->src;
+
+        // Only local files
+        if (strpos($src, home_url()) === 0 || strpos($src, '/') === 0) {
+
+            $path = str_replace(home_url(), ABSPATH, $src);
+
+            if (file_exists($path)) {
+                $css = file_get_contents($path);
+
+                // Match: --var-name: #hex;
+                $pattern = '/' . preg_quote($css_var, '/') . '\s*:\s*([^;]+);/';
+                echo 'pattern = ' . $pattern . ' | ';
+                echo 'preg = ' . preg_match($pattern, $css, $matches);
+                if (preg_match($pattern, $css, $matches)) {
+                    return trim($matches[1]);  // returns "#49D3FF"
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+
+function dlx_resolve_global_color_var($var)
+{
+
+    // Only process CSS variables
+    if (strpos($var, '--digital-newspaper-global-preset-color-') !== 0) {
+        return $var; // already a hex or invalid
+    }
+
+    // Extract number from --digital-newspaper-global-preset-color-7
+    if (preg_match('/color-(\d+)/', $var, $m)) {
+        $index = intval($m[1]);
+
+        // Get the actual hex from Customizer global colors
+        $hex = get_theme_mod("digital_newspaper_global_color_{$index}");
+
+        if ($hex)
+            return $hex;
+    }
+
+    return false;
+}
+
+
+/***
+ * AUTORES VARIOS
+ */
+
+if (!function_exists('digital_newspaper_posted_by')):
+    /**
+     * Prints HTML with meta information for the current author(s).
+     * Supports PublishPress Authors if available.
+     */
+    function digital_newspaper_posted_by($post_id = '')
+    {
+
+        // Try PublishPress Authors first (multiple authors / guest authors)
+        if (function_exists('get_multiple_authors')) {
+
+            // If a post ID was passed, use that; otherwise let it use the global post.
+            $post_for_authors = $post_id ? $post_id : null;
+
+            $authors = get_multiple_authors($post_for_authors);
+
+            if (!empty($authors) && is_array($authors)) {
+                $author_links = array();
+
+                foreach ($authors as $author) {
+                    // Each $author is an instance of MultipleAuthors\Classes\Objects\Author
+                    $author_links[] = sprintf(
+                        '<span class="author vcard"><a class="url fn n author_name" href="%s">%s</a></span>',
+                        esc_url($author->link),
+                        esc_html($author->display_name)
+                    );
+                }
+
+                echo '<span class="byline"> ' . implode(',&nbsp;', $author_links) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                return;
+            }
+        }
+
+        // Fallback: default single WP author (original behavior)
+        $author_id = $post_id ? get_post_field('post_author', $post_id) : get_the_author_meta('ID');
+        $author_name = $post_id ? get_the_author_meta('display_name', $author_id) : get_the_author();
+
+        $byline = sprintf(
+            '<span class="author vcard"><a class="url fn n author_name" href="%s">%s</a></span>',
+            esc_url(get_author_posts_url($author_id)),
+            esc_html($author_name)
+        );
+
+        echo '<span class="byline"> ' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+endif;
+
+
+/***
+ * FOTOGRAFO
+ */
+/**
+ * Meta box: Fotógrafo (seleciona um utilizador)
+ */
+function dlx_add_photo_user_metabox()
+{
+    add_meta_box(
+        'dlx_photo_user',
+        'Fotógrafo',
+        'dlx_photo_user_metabox_callback',
+        'post',   // só para posts
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'dlx_add_photo_user_metabox');
+
+function dlx_photo_user_metabox_callback($post)
+{
+    // Segurança
+    wp_nonce_field('dlx_save_photo_user', 'dlx_photo_user_nonce');
+
+    $selected_user = get_post_meta($post->ID, '_dlx_photo_user', true);
+
+    wp_dropdown_users(array(
+        'name' => 'dlx_photo_user',
+        'selected' => $selected_user,
+        'show_option_none' => '— Nenhum fotógrafo —',
+        'include_selected' => true,
+        // Se quiseres limitar: 'role__in' => array( 'author', 'editor' ),
+    ));
+}
+
+function dlx_save_photo_user_metabox($post_id)
+{
+    // Verifica nonce
+    if (
+        !isset($_POST['dlx_photo_user_nonce']) ||
+        !wp_verify_nonce($_POST['dlx_photo_user_nonce'], 'dlx_save_photo_user')
+    ) {
+        return;
+    }
+
+    // Evita autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Permissões
+    if (isset($_POST['post_type']) && 'post' === $_POST['post_type']) {
+        if (!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+    }
+
+    if (isset($_POST['dlx_photo_user']) && $_POST['dlx_photo_user'] !== '') {
+        $photo_user_id = (int) $_POST['dlx_photo_user'];
+        update_post_meta($post_id, '_dlx_photo_user', $photo_user_id);
+    } else {
+        delete_post_meta($post_id, '_dlx_photo_user');
+    }
+}
+add_action('save_post', 'dlx_save_photo_user_metabox');
+
+
+/**
+ * TAMBEM PODES GOSTAR
+ */
+
+if ( ! function_exists( 'digital_newspaper_single_related_posts' ) ) :
+    /**
+     * Single related posts – styled like home sections
+     */
+    function digital_newspaper_single_related_posts() {
+
+        // Only for posts
+        if ( get_post_type() !== 'post' ) {
+            return;
+        }
+
+        // Respect customizer toggle
+        $single_post_related_posts_option = DN\digital_newspaper_get_customizer_option( 'single_post_related_posts_option' );
+        if ( ! $single_post_related_posts_option ) {
+            return;
+        }
+
+        // Get current post categories
+        $current_post_categories = get_the_category( get_the_ID() );
+        $query_cats              = [];
+
+        if ( $current_post_categories ) {
+            foreach ( $current_post_categories as $current_post_cat ) {
+                $query_cats[] = (int) $current_post_cat->term_id;
+            }
+        }
+
+        // Build related posts query (4 posts now)
+        $related_posts_args = [
+            'posts_per_page'      => 4,                  // ← 4 posts
+            'post__not_in'        => [ get_the_ID() ],
+            'ignore_sticky_posts' => true,
+        ];
+
+        if ( ! empty( $query_cats ) ) {
+            $related_posts_args['category__in'] = $query_cats;
+        }
+
+        // Keep your existing filter hook
+        $related_posts_args = apply_filters( 'digital_newspaper_query_args_filter', $related_posts_args );
+
+        $related_posts = new WP_Query( $related_posts_args );
+
+        if ( ! $related_posts->have_posts() ) {
+            return;
+        }
+
+        // Title from Customizer (fallback if empty)
+        $related_posts_title = DN\digital_newspaper_get_customizer_option( 'single_post_related_posts_title' );
+        if ( ! $related_posts_title ) {
+            $related_posts_title = __( 'Artigos Relacionados', 'digital-newspaper' );
+        }
+
+        // Build link & color for section_title
+        $cat_link = '';
+        $color    = '#000000'; // default – change to your dynamic color if you have that function
+
+        if ( ! empty( $current_post_categories ) ) {
+            $primary_cat = $current_post_categories[0];
+            $cat_link    = get_category_link( $primary_cat->term_id );
+
+            // If you have a helper to get category color, plug it here:
+            // $color = digital_newspaper_get_category_color( $primary_cat->term_id );
+        }
+        ?>
+
+        <section class="single-related-posts-section related-from-home-section">
+            <?php
+            // Same style as your home section title
+            get_template_part(
+                'inc/section_title',
+                null,
+                [
+                    'title' => $related_posts_title,
+                    'link'  => $cat_link, // e.g. to the main category archive
+                    'color' => $color,
+                ]
+            );
+
+            // Use the new template that behaves like home-sections-template
+            get_template_part(
+                'template-parts/main-sections/related-posts-template',
+                null,
+                [
+                    'query' => $related_posts,
+                ]
+            );
+            ?>
+        </section>
+
+        <?php
+    }
+endif;
+add_action('digital_newspaper_single_post_append_hook', 'digital_newspaper_single_related_posts');
+
+/***
+ * TAGS NO SINGLE POST
+ */
+if( ! function_exists( 'digital_newspaper_tags_list' ) ) :
+	/**
+	 * print the html for tags list
+	 */
+	function digital_newspaper_tags_list() {
+		// Hide category and tag text for pages.
+		if ( 'post' === get_post_type() ) {
+			/* translators: used between list items, there is a space after the comma */
+			$tags_list = get_the_tag_list( '', ' ' );
+			if ( $tags_list ) {
+				/* translators: 1: list of tags. */
+				printf( '<span class="tags-links">' . esc_html__( '%1$s', 'digital-newspaper' ) . '</span>', $tags_list ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+	}
+endif;
+
+
+/**
+ * FOOTER
+ */
+if( ! function_exists( 'digital_newspaper_bottom_footer_copyright_part' ) ) :
+   /**
+    * Bottom Footer copyright element
+    * 
+    * @since 1.0.0
+    */
+   function digital_newspaper_bottom_footer_copyright_part() {
+      $bottom_footer_site_info = DN\digital_newspaper_get_customizer_option( 'bottom_footer_site_info' );
+      if( ! $bottom_footer_site_info ) return;
+     ?>
+        <div class="site-info <?php if( !DN\digital_newspaper_get_customizer_option( 'bottom_footer_menu_option' ) ) echo esc_attr(' blaze_copyright_align_center');  ?>">
+            <?php echo wp_kses_post( str_replace( '%year%', date('Y'), $bottom_footer_site_info ) ); ?>
+        </div>
+     <?php
+   }
+   add_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_bottom_footer_copyright_part', 20 );
+endif;
+
+/**
+ * TIPOS DIFERENTES DE TEXTO - ARTICLE
+ */
+/**
+ * Override editor font sizes (Gutenberg: S / M / L / XL buttons).
+ */
+function dn_child_custom_editor_font_sizes() {
+
+    // Define your own sizes (change names, shortName and size as you like)
+    add_theme_support(
+        'editor-font-sizes',
+        array(
+            array(
+                'name'      => __( 'Legenda', 'digital-newspaper-child' ),
+                'shortName' => 'L', // what appears on the button
+                'size'      => 10,
+                'weight' => '400',
+                'slug'      => 'legenda',
+            ),
+            array(
+                'name'      => __( 'Corpo de texto', 'digital-newspaper-child' ),
+                'shortName' => 'CT',
+                'size'      => 15,
+                'weight' => '400',
+                'slug'      => 'corpo-texto',
+            ),
+            array(
+                'name'      => __( 'Titulo', 'digital-newspaper-child' ),
+                'shortName' => 'T',
+                'size'      => 22,
+                'weight' => '700',
+                'slug'      => 'titulo',
+            ),
+            array(
+                'name'      => __( 'Destaque', 'digital-newspaper-child' ),
+                'shortName' => 'D',
+                'size'      => 24,
+                'weight' => '700',
+                'slug'      => 'destaque',
+            ),
+        )
+    );
+}
+add_action( 'after_setup_theme', 'dn_child_custom_editor_font_sizes', 11 );
+
+
+/***
+ * ESCONDER MAIN-POST
+ */
+/**
+ * Esconde tags técnicas (ex: "main-post") da apresentação
+ * e reindexa o array para que a "segunda" tag passe a ser a primeira.
+ */
+function dn_hide_technical_tags_from_display( $terms, $post_id, $taxonomy ) {
+    if ( $taxonomy !== 'post_tag' || empty( $terms ) || is_wp_error( $terms ) ) {
+        return $terms;
+    }
+
+    // Slugs das tags que são só para lógica, não para mostrar
+    $hidden_slugs = array(
+        'main-post',      // destaque principal
+        // 'main-post-2', // podes adicionar mais se quiseres
+    );
+
+    $visible_terms = array();
+
+    foreach ( $terms as $term ) {
+        // Só mantemos as tags que NÃO são técnicas
+        if ( ! in_array( $term->slug, $hidden_slugs, true ) ) {
+            $visible_terms[] = $term; // reindexa automaticamente: 0,1,2,...
+        }
+    }
+
+    return $visible_terms;
+}
+add_filter( 'get_the_terms', 'dn_hide_technical_tags_from_display', 10, 3 );
