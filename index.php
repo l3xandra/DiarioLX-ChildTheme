@@ -102,9 +102,16 @@ get_template_part('template-parts/main-sections/home-section-4cols-no-image');
 /**
  * MAIN BANNER - SECCAO IMPORTANTE - Lisboa, Cidade Aberta
  */
-if (is_home() && is_front_page()) {
+/**if (is_home() && is_front_page()) {
 	do_action('digital_newspaper_main_banner_hook');
-}
+}**/
+
+get_template_part('template-parts/main-banner/template-full-img', null, [
+  'category'  => 'lisboacidadeaberta',
+  'title'     => 'Lisboa, Cidade Aberta',
+  'font_size' => '50px',
+]);
+
 
 /***
  * SECCAO - SECCOES: Internacional, Politica, Sociedade, Economia

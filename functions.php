@@ -3,6 +3,19 @@
 if (!defined('ABSPATH'))
     exit;
 
+
+/***
+ * DAY NIGHT MODE REMOVE
+ */
+// Disable the theme's header night-mode toggle (blaze-switcher-button)
+if ( ! function_exists( 'digital_newspaper_header_theme_mode_icon_part' ) ) {
+  function digital_newspaper_header_theme_mode_icon_part() {
+    // do nothing
+  }
+}
+
+
+
 // BEGIN ENQUEUE PARENT ACTION
 // AUTO GENERATED - Do not modify or remove comment markers above or below:
 
@@ -263,7 +276,7 @@ if (!function_exists('digital_newspaper_posted_by')):
                     );
                 }
 
-                echo '<span class="byline"> ' . implode(',&nbsp;', $author_links) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo '<span class="byline"> ' . implode(',&nbsp;', $author_links) . ' <span class="byline-sep"> &nbsp &nbsp • &nbsp &nbsp </span></span>';
                 return;
             }
         }
@@ -520,14 +533,14 @@ function dn_child_custom_editor_font_sizes() {
             array(
                 'name'      => __( 'Titulo', 'digital-newspaper-child' ),
                 'shortName' => 'T',
-                'size'      => 22,
-                'weight' => '700',
+                'size'      => 30,
+                'weight' => '800',
                 'slug'      => 'titulo',
             ),
             array(
                 'name'      => __( 'Destaque', 'digital-newspaper-child' ),
                 'shortName' => 'D',
-                'size'      => 24,
+                'size'      => 40,
                 'weight' => '700',
                 'slug'      => 'destaque',
             ),
@@ -567,3 +580,198 @@ function dn_hide_technical_tags_from_display( $terms, $post_id, $taxonomy ) {
     return $visible_terms;
 }
 add_filter( 'get_the_terms', 'dn_hide_technical_tags_from_display', 10, 3 );
+
+
+/***
+ * LOGO ANIMADO
+ */
+/**
+ * 1) Replace the Custom Logo markup with a dotLottie web component
+ */
+add_filter('get_custom_logo', function ($html, $blog_id) {
+
+  $src  = get_stylesheet_directory_uri() . '/assets/lottie/LOGO_ANIM.lottie';
+  $home = home_url('/');
+  $name = get_bloginfo('name');
+
+  return sprintf(
+    '<a href="%s" class="custom-logo-link dlx-lottie-logo-link" rel="home" aria-label="%s">' .
+      '<dotlottie-wc id="dlxHeaderLottie" class="custom-logo dlx-header-lottie" src="%s"></dotlottie-wc>' .
+    '</a>',
+    esc_url($home),
+    esc_attr($name),
+    esc_url($src)
+  );
+}, 10, 2);
+
+
+/**
+ * 2) Enqueue dotLottie player + your scroll controller
+ */
+add_action('wp_enqueue_scripts', function () {
+
+  // dotlottie-wc is a MODULE script (web component)
+  wp_enqueue_script(
+    'dotlottie-wc',
+    'https://unpkg.com/@lottiefiles/dotlottie-wc@latest/dist/dotlottie-wc.js',
+    [],
+    null,
+    true
+  );
+
+  // Force type="module"
+  add_filter('script_loader_tag', function ($tag, $handle, $src) {
+    if ($handle === 'dotlottie-wc') {
+      return '<script type="module" src="' . esc_url($src) . '"></script>';
+    }
+    return $tag;
+  }, 10, 3);
+
+  // your header scroll logic
+  wp_enqueue_script(
+    'dlx-header-lottie',
+    get_stylesheet_directory_uri() . '/assets/js/header-lottie-logo.js',
+    [],
+    null,
+    true
+  );
+});
+
+/**
+ * HOMEPAGE MENU TRANSICAO SCROLL
+ */
+add_action('wp_footer', function () {
+  if ( ! ( is_front_page() || is_home() ) ) return;
+  ?>
+  <script>
+  (function () {
+    const b = document.body;
+    const threshold = 10; // px before reverting
+
+    let ticking = false;
+    function update() {
+      const scrolled = window.scrollY > threshold;
+      b.classList.toggle('dlx-scrolled', scrolled);
+      ticking = false;
+    }
+
+    update();
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+  </script>
+  <?php
+}, 99);
+
+/**
+ * DESTAQUE ARTIGO COR
+ */
+
+
+
+
+
+
+
+/**
+ * 1) Vai buscar a cor do tema para uma categoria (a mesma que pinta a pill/tag).
+ */
+function dlx_get_category_color_from_theme( $cat_id ) {
+    $cat_id = absint($cat_id);
+    if (!$cat_id) return '';
+
+    if (!function_exists('\Digital_Newspaper\CustomizerDefault\digital_newspaper_get_customizer_option')) {
+        return '';
+    }
+
+    $data = \Digital_Newspaper\CustomizerDefault\digital_newspaper_get_customizer_option('category_' . $cat_id . '_color');
+
+    if (!is_array($data) || empty($data['color'])) return '';
+
+    $color = $data['color'];
+    if (function_exists('digital_newspaper_get_color_format')) {
+        $color = digital_newspaper_get_color_format($color);
+    }
+    return $color;
+}
+
+/**
+ * 2) Escolhe a “categoria principal” (a 1ª) e devolve a cor.
+ */
+function dlx_get_post_accent_color( $post_id ) {
+    $post_id = absint($post_id);
+    if (!$post_id) return '';
+
+    $cats = wp_get_post_categories($post_id, ['number' => 1]);
+    if (empty($cats)) return '';
+
+    return dlx_get_category_color_from_theme((int)$cats[0]);
+}
+
+/**
+ * 3) FRONT-END (single post): define --dlx-cat-accent no <body>.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!is_singular('post')) return;
+
+    $color = dlx_get_post_accent_color(get_queried_object_id());
+    if (!$color) return;
+
+    $handle = wp_style_is('digital-newspaper-child-style', 'enqueued')
+        ? 'digital-newspaper-child-style'
+        : 'digital-newspaper-style';
+
+    wp_add_inline_style($handle, "body.single-post{--dlx-cat-accent: {$color};}");
+}, 20);
+
+/**
+ * 4) EDITOR (Gutenberg): atualiza --dlx-cat-accent quando mudas a categoria no editor.
+ */
+add_action('enqueue_block_editor_assets', function () {
+
+    // mapa term_id => cor
+    $cats = get_categories(['hide_empty' => false]);
+    $map  = [];
+
+    foreach ($cats as $cat) {
+        $c = dlx_get_category_color_from_theme($cat->term_id);
+        if ($c) $map[(int)$cat->term_id] = $c;
+    }
+
+    // CSS no editor (podes usar em qualquer selector via var(--dlx-cat-accent))
+    wp_register_style('dlx-editor-accent', false);
+    wp_enqueue_style('dlx-editor-accent');
+    wp_add_inline_style('dlx-editor-accent', ".editor-styles-wrapper{--dlx-cat-accent: transparent;}");
+
+    // JS que lê a categoria escolhida e mete a var
+    $json = wp_json_encode($map);
+    $js = "window.DLX_CAT_COLORS={$json};
+(function(){
+  if(!window.wp || !wp.data) return;
+
+  const target = document.querySelector('.editor-styles-wrapper') || document.documentElement;
+
+  const apply = () => {
+    const cats = wp.data.select('core/editor').getEditedPostAttribute('categories') || [];
+    const id = cats[0];
+    const col = (id && window.DLX_CAT_COLORS && window.DLX_CAT_COLORS[id]) ? window.DLX_CAT_COLORS[id] : '';
+    if(col) target.style.setProperty('--dlx-cat-accent', col);
+    else target.style.removeProperty('--dlx-cat-accent');
+  };
+
+  let last = null;
+  apply();
+  wp.data.subscribe(() => {
+    const cats = wp.data.select('core/editor').getEditedPostAttribute('categories') || [];
+    const now = cats[0] || null;
+    if(now !== last){ last = now; apply(); }
+  });
+})();";
+
+    wp_add_inline_script('wp-data', $js, 'after');
+}, 20);
+

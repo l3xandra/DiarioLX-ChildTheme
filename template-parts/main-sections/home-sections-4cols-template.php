@@ -78,7 +78,7 @@ $colors = $args['article_colors'] ?? [];
                                 $q->the_post();
 
                                 get_template_part(
-                                    'template-parts/content-w-title',
+                                    'template-parts/content-w-title-smaller',
                                     get_post_type(),
                                     ['custom_section' => $custom_section]
                                 );

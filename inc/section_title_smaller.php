@@ -6,7 +6,7 @@ $color = $args['color'] ?? '#49D3FF';
 
 <h2 class="digital-newspaper-block-title my-main-banner-title"
     style="
-        border-bottom: 2px solid <?php echo esc_attr($color); ?> !important;
+        border-bottom: 1px solid <?php echo esc_attr($color); ?> !important;
         padding-bottom: 4px;
         margin-bottom: 12px;
         width: 100%;

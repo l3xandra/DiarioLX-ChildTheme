@@ -54,13 +54,11 @@ if ($top_post->have_posts()):
                                     <div class="dn-narrow-wrap">
                                         <div class="post-meta">
                                             <?php digital_newspaper_get_post_categories(get_the_ID(), 2); ?>
-                                            <?php digital_newspaper_posted_on(); ?>
                                         </div>
                                         <h2 class="post-title">
                                             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                         </h2>
 
-                                        <div class="post-excerpt"><?php the_excerpt(); ?></div>
                                     </div>
                                 </div>
                             </div>

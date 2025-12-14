@@ -24,7 +24,7 @@ $orderby  = $args['orderby'] ?? 'date';
         <div class="digital-newspaper-container">
             <div class="row">
 
-                <div class="primary-content">
+                <div class="primary-content margin-bottom">
 
                     <?php
                     // Build query

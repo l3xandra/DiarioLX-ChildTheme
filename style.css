@@ -26,6 +26,11 @@ Updated: 2025-11-12 20:46:27
   --font-line-height-T1-2: 38px;
   --font-weight-T1-2: 600;
   --small-text-font: 0.8rem;
+  --smaller-title-font-size: 17px;
+  --smaller-title-font-height: 21px;
+  --font-weight-tittle-smaller: 500;
+  --font-size-t2: 25px;
+  --line-height-t2: 32px;
 }
 
 body {
@@ -40,7 +45,8 @@ body {
 .main-navigation .nav.menu li a {
   font-family: var(--font-family-base) !important;
   font-size: 14px !important;
-  font-weight: 300 !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
 }
 
 /*TITULO das seccoes na homepage*/
@@ -54,7 +60,7 @@ body {
 /* Border and text color use CSS variable */
 h2.digital-newspaper-block-title {
   margin-bottom: 0px !important;
-  border-bottom: 2px solid var(--section-title-color) !important;
+  border-bottom: 1px solid var(--section-title-color) !important;
 }
 
 .digital-newspaper-block-title span,
@@ -120,60 +126,12 @@ h2.digital-newspaper-block-title {
   max-width: 100% !important;
 }
 
-/* Force posts inside news-list-wrap to appear in 3 columns */
-/**
-* limitar as tres colunas para desktop
-*/
-@media screen and (min-width: 840px) {
-  .news-list-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    /* ajusta se quiseres */
-  }
 
-  .news-list-wrap>article.post {
-    flex: 0 0 33.333% !important;
-    max-width: 33.333% !important;
-  }
-
-  .news-list-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    /* já deve ter */
-    justify-content: flex-start;
-    /* garante que os items começam na esquerda */
-    gap: 0;
-    /* ou define gap desejado */
-  }
-
-  .news-list-wrap>article {
-    flex: 0 0 33.333%;
-    /* ocupa 1/3 */
-    max-width: 33.333%;
-    box-sizing: border-box;
-    /* inclui padding e border na largura */
-  }
-
-}
 
 /**
 * HOMAPAGE 3 COLLUMN SECTION TURNS INTO 1 COLUMN
 */
 @media screen and (max-width: 840px) {
-  .news-list-wrap {
-    display: block !important;
-  }
-
-  .news-list-wrap>article {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: none !important;
-  }
-
-  .primary-content .news-list-wrap article {
-    display: block !important;
-  }
 
   .top-main-banner-item .post-thumb img {
     max-height: 800px;
@@ -198,7 +156,6 @@ h2.digital-newspaper-block-title {
 .top-main-banner-item .post-thumb img {
   width: 100%;
   height: auto;
-  max-height: 600px;
   /* muda para o valor que pretendes */
   object-fit: cover;
   display: block;
@@ -231,7 +188,7 @@ h2.digital-newspaper-block-title {
 .top-main-banner-item .post-title a {
   color: #fff !important;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -296,6 +253,8 @@ h2.digital-newspaper-block-title {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 25px;
+  padding: 10px;
+  padding-bottom: 60px;
 }
 
 /* Make sure article boxes behave in grid */
@@ -365,7 +324,7 @@ body.post-layout--two #theme-content .primary-content .news-list-wrap article {
 */
 h3.my-main-banner-title {
   font-size: 40px !important;
-  border-bottom: 2px solid var(--section-title-color) !important;
+  border-bottom: 0.5px solid var(--section-title-color) !important;
   margin-bottom: 10px;
 }
 
@@ -471,7 +430,8 @@ h3.my-main-banner-title {
 @media (max-width: 1200px) {
   .single .entry-header.entry-header--with-thumb .entry-header-inner {
     display: flex;
-    flex-direction: column-reverse; /* <— invert order */
+    flex-direction: column-reverse;
+    /* <— invert order */
     max-width: 720px;
     margin: 0 auto;
   }
@@ -498,7 +458,7 @@ h3.my-main-banner-title {
   font-family: var(--font-family-body) !important;
   font-size: var(--font-entrada-size) !important;
   line-height: var(--font-entrada-line-height) !important;
-  font-weight: 300;
+  font-weight: 500;
   margin-top: 10px;
   margin-bottom: 15px;
 }
@@ -609,7 +569,7 @@ h3.my-main-banner-title {
 }
 
 /* Responsivo: em ecrãs pequenos, empilha tudo (autores em cima, texto em baixo) */
-@media (max-width: 1200px) {
+
   .single .single-layout-wrapper {
     display: block;
   }
@@ -618,9 +578,9 @@ h3.my-main-banner-title {
     width: auto;
     margin-bottom: 1.5rem;
     display: flex;
-  justify-content: center;
+    justify-content: center;
   }
-}
+
 
 .p {
   margin-top: 0px;
@@ -657,20 +617,7 @@ a:visited {
   color: inherit !important;
 }
 
-/* A coluna dos autores organiza POR + autores em linha com wrap */
-.single .single-authors-column {
-  display: flex;
-  flex-wrap: wrap;
-  /* quando não couber mais, salta para a linha de baixo */
-  gap: 0.4rem;
-  align-items: baseline;
-}
 
-/* Esse <p> vazio ocupa uma linha inteira (ou remove-o em PHP se não precisares) */
-.single .single-authors-column p.has-medium-font-size {
-  flex-basis: 100%;
-  margin: 0 0 0.5rem;
-}
 
 /* "POR" na mesma linha dos autores */
 .single .single-authors-title {
@@ -688,6 +635,18 @@ a:visited {
   flex-wrap: wrap;
   gap: 0.4rem;
 }
+
+/* NÃO metas color no wrapper */
+.single .single-authors-list{
+  color: inherit !important;
+}
+
+/* Cor só nos links dos autores (inclui visited) */
+.single .single-authors-list a.author_name,
+.single .single-authors-list a.author_name:visited{
+  color: var(--dlx-cat-accent, #171717) !important;
+}
+
 
 /* Dentro da lista, a .byline já estava a ser usada para flex dos autores */
 .single .single-authors-list .byline {
@@ -754,6 +713,32 @@ a:visited {
   transform: scale(1.03);
 }
 
+
+/** 3 COLUNAS COM GAP 20PX */
+/* NEWS LIST WRAP: 3 cols desktop, 1 col mobile + gutters */
+.news-list-wrap {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  /* mobile default */
+  gap: 20px;
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 840px) {
+  .news-list-wrap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Reset theme widths that can break grid */
+.news-list-wrap>article,
+.news-list-wrap>article.post {
+  width: auto !important;
+  max-width: none !important;
+  flex: none !important;
+}
+
+
 /** TAGS SINGLE POST */
 .tags-links {
   text-transform: uppercase;
@@ -773,35 +758,54 @@ a:visited {
   justify-content: center;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
-  padding: 8px 0; /* optional, just for breathing room */
+  padding: 8px 0;
+  /* optional, just for breathing room */
 }
 
 
 .single-tags-label {
-    font-size: var(--small-text-font);
-    font-weight: 700;
-    display: inline-flex;   /* inline-flex is nicer for a label */
-    justify-content: center; /* horizontal */
-    align-items: center;     /* vertical */
+  font-size: var(--small-text-font);
+  font-weight: 700;
+  display: inline-flex;
+  /* inline-flex is nicer for a label */
+  justify-content: center;
+  /* horizontal */
+  align-items: center;
+  /* vertical */
 }
 
-.post-meta{
-    display: flex;              /* fica em row por padrão */
+.post-meta {
+  display: flex;
+  /* fica em row por padrão */
   flex-direction: row;
-  justify-content: space-between; /* um item encostado à esquerda e o outro à direita */
-  align-items: center; 
+  justify-content: space-between;
+  /* um item encostado à esquerda e o outro à direita */
+  align-items: center;
 }
 
 .smaller-tittle {
-  font-size: 13px;
+  font-size: var(--smaller-title-font-size) !important;
+  line-height: var(--smaller-title-font-height) !important;
+  font-family: var(--font-family-base) !important;
+  font-weight: var(--font-weight-tittle-smaller) !important;
 }
 
-a.white-font:visited{
-  color:#fff !important;
+.post-title {
+  font-family: var(--font-family-base) !important;
 }
 
-.white-font a{
-  color:#fff !important;
+
+.title-no-image {
+  padding-top: 15px !important;
+}
+
+
+a.white-font:visited {
+  color: #fff !important;
+}
+
+.white-font a {
+  color: #fff !important;
 }
 
 
@@ -815,24 +819,39 @@ a.white-font:visited{
 
 .has-corpo-texto-font-size {
   font-size: var(--font-body-size);
-  line-height:  var(--font-body-line-height);
+  line-height: var(--font-body-line-height);
   font-family: var(--font-family-body);
   font-weight: 400;
 }
 
 .has-titulo-font-size {
-  font-size: 20px;
+  font-size: 30px;
   line-height: 28px;
   font-family: var(--font-family-body);
   font-weight: 700;
+  margin-bottom: 0px !important;
+  margin-top: 40px !important;
+  color: var(--dlx-cat-accent, transparent);
 }
 
 .has-destaque-font-size {
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 32px;
+  line-height: 45px;
   font-family: var(--font-family-body);
-  font-weight: 700;
+  font-weight: 600;
+  text-align: center;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 3px solid var(--dlx-cat-accent, transparent);
+  border-bottom: 3px solid var(--dlx-cat-accent, transparent);
 }
+
+
+
+
+
+
+
 
 /* Base caption style */
 .entry-content figure.wp-block-image figcaption {
@@ -859,11 +878,13 @@ a.white-font:visited{
 /* Desktop: no layout THREE, empilhar logo + menu em coluna */
 
 @media (min-width: 1024px) {
+
   /* A row que contém logo + menu passa de row para coluna */
   .site-header.layout--three .site-branding-section .digital-newspaper-container .row {
     display: flex;
     flex-direction: column;
-    align-items: center; /* se quiseres tudo centrado; usa flex-start para ficar à esquerda */
+    align-items: center;
+    /* se quiseres tudo centrado; usa flex-start para ficar à esquerda */
   }
 
   /* Logo: espaço por baixo e centrado */
@@ -888,15 +909,19 @@ a.white-font:visited{
 
 
 @media (min-width: 1024px) {
+
   /* Centro absoluto do bloco site-branding */
   .site-header.layout--three .site-branding {
     display: flex;
     flex-direction: column;
-    align-items: center;   /* centra tudo dentro do bloco */
+    align-items: center;
+    /* centra tudo dentro do bloco */
     justify-content: center;
-    margin: 0 auto 1rem;   /* centra o próprio bloco na linha */
+    margin: 0 auto 1rem;
+    /* centra o próprio bloco na linha */
     text-align: center;
-    width: auto;           /* ou 100% se quiseres ocupar tudo */
+    width: auto;
+    /* ou 100% se quiseres ocupar tudo */
   }
 
   /* Se o logo tiver a class default do WP */
@@ -920,3 +945,593 @@ header.site-header {
   padding-bottom: 0 !important;
 }
 
+/** LOGO ANIMADO */
+/* the theme expects the logo element to size itself; give it dimensions */
+
+
+.dlx-header-lottie {
+  width: 140px;
+  /* adjust */
+  height: 40px;
+  /* adjust */
+  display: block;
+}
+
+.site-branding {
+  margin-bottom: 0 !important;
+}
+
+/* Keep the logo area tight */
+.site-branding .custom-logo-link.dlx-lottie-logo-link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* 1) Make sure the logo wrappers are allowed to grow */
+.site-branding,
+.site-branding .custom-logo-link.dlx-lottie-logo-link {
+  max-width: none !important;
+  overflow: visible !important;
+  /* or hidden if you prefer cropping */
+  flex: 0 0 auto;
+}
+
+/* 2) The Lottie element is the “real logo” — size it here */
+.site-branding dotlottie-wc.dlx-header-lottie {
+  display: block;
+  height: 500px;
+  /* increase this */
+  width: auto;
+  max-width: none !important;
+  /* IMPORTANT: don't cap it */
+}
+
+/** STICKY MENU **/
+/* Layout three: keep header always visible */
+#masthead.site-header.layout--three {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+
+  /* stop "hide on scroll" effects */
+  transform: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* admin bar offset */
+body.admin-bar #masthead.site-header.layout--three {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+:root {
+  --dlx-header-h: 0px;
+}
+
+body {
+  padding-top: var(--dlx-header-h);
+}
+
+
+.site-branding-section {
+  padding: 0 !important;
+}
+
+/** MENU LINKS DESAPARECEM QUANDO SCROLL **/
+/* Make sure the header stays visible (you already did something like this) */
+#masthead.site-header.layout--three {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 999999;
+  transform: none !important;
+}
+
+/* Smooth shrink/grow */
+#masthead.site-header.layout--three .site-branding-section {
+  transition: padding .25s ease;
+  padding: 18px 0;
+  /* normal header height */
+}
+
+/* Smooth fade/collapse for the menu area */
+#masthead.layout--three #site-navigation,
+#masthead.layout--three .header-smh-button-wrap {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 300px;
+  /* big enough for your menu */
+  overflow: hidden;
+  transition: opacity .5s ease, transform .5s ease, max-height .5s ease;
+}
+
+
+/* ========== COLLAPSED STATE (when scrolling down) ========== */
+body.dlx-header-collapsed #masthead.site-header.layout--three .site-branding-section {
+  padding: 6px 0;
+  /* collapsed height = mostly logo */
+}
+
+/* Hide menu links area (and search wrapper on layout--three) */
+body.dlx-header-collapsed #masthead.layout--three #site-navigation,
+body.dlx-header-collapsed #masthead.layout--three .header-smh-button-wrap {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+
+  max-height: 0;
+  /* THIS is what makes it shrink */
+  overflow: hidden;
+}
+
+
+/* Also hide title/description so it truly becomes “logo-only” */
+body.dlx-header-collapsed #masthead.site-header.layout--three .site-title,
+body.dlx-header-collapsed #masthead.site-header.layout--three .site-description {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0 !important;
+}
+
+@media (min-width: 1024px) {
+  .site-header.layout--three .main-navigation {
+    margin-top: 0px;
+  }
+}
+
+
+/* Always black */
+#dlxHeaderLottie {
+  filter: brightness(0);
+}
+
+/* Remove container padding ONLY in the header */
+#masthead .digital-newspaper-container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Show immediately + prevent the big flash by forcing a stable box */
+#dlxHeaderLottie {
+  width: 160px;
+  /* your final logo size */
+  height: auto;
+  display: block;
+  overflow: hidden;
+  /* stops oversized first paint spilling out */
+}
+
+/*** MENU HOMEPAGE DIFERENT **/
+/* Smooth transitions (homepage only) */
+body.home #masthead,
+body.front-page #masthead,
+body.home header .main-header,
+body.front-page header .main-header,
+body.home #masthead .top-header,
+body.front-page #masthead .top-header,
+body.home #masthead .site-branding-section,
+body.front-page #masthead .site-branding-section,
+body.home #masthead .menu-section,
+body.front-page #masthead .menu-section,
+body.home #masthead a,
+body.front-page #masthead a,
+body.home #dlxHeaderLottie,
+body.front-page #dlxHeaderLottie {
+  transition: background-color .25s ease, color .25s ease, box-shadow .25s ease, filter .25s ease, text-shadow .25s ease;
+}
+
+/* Overlay gradient layer (exists on homepage; fades out on scroll) */
+body.home #masthead,
+body.front-page #masthead {
+  position: relative;
+}
+
+body.home #masthead::before,
+body.front-page #masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.10));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity .25s ease;
+
+  /* feather bottom */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) calc(100% - 50px), rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) calc(100% - 50px), rgba(0, 0, 0, 0) 100%);
+}
+
+/* Fade overlay out after scroll => theme’s normal header shows */
+body.home.dlx-scrolled #masthead::before,
+body.front-page.dlx-scrolled #masthead::before {
+  opacity: 0;
+}
+
+/* Keep header content above overlay */
+body.home #masthead>*,
+body.front-page #masthead>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== NOT SCROLLED (your special homepage look) ===== */
+body.home:not(.dlx-scrolled) #masthead .top-header,
+body.home:not(.dlx-scrolled) #masthead .site-branding-section,
+body.home:not(.dlx-scrolled) #masthead .menu-section,
+body.front-page:not(.dlx-scrolled) #masthead .top-header,
+body.front-page:not(.dlx-scrolled) #masthead .site-branding-section,
+body.front-page:not(.dlx-scrolled) #masthead .menu-section {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* remove header shadow only in the special state */
+body.home:not(.dlx-scrolled) header .main-header,
+body.front-page:not(.dlx-scrolled) header .main-header {
+  box-shadow: none !important;
+}
+
+/* White text/icons only in the special state */
+body.home:not(.dlx-scrolled) #masthead,
+body.front-page:not(.dlx-scrolled) #masthead,
+body.home:not(.dlx-scrolled) #masthead a,
+body.front-page:not(.dlx-scrolled) #masthead a {
+  color: #fff !important;
+}
+
+body.home:not(.dlx-scrolled) #masthead svg,
+body.front-page:not(.dlx-scrolled) #masthead svg {
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
+/* Lottie only in the special state */
+body.home:not(.dlx-scrolled) #dlxHeaderLottie,
+body.front-page:not(.dlx-scrolled) #dlxHeaderLottie {
+  filter: brightness(1) !important;
+}
+
+/* Remove per-link/button backgrounds only in the special state */
+body.home:not(.dlx-scrolled) #masthead .main-navigation a,
+body.front-page:not(.dlx-scrolled) #masthead .main-navigation a,
+body.home:not(.dlx-scrolled) #masthead .search-form button,
+body.front-page:not(.dlx-scrolled) #masthead .search-form button {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Menu link readability only in the special state */
+body.home:not(.dlx-scrolled) #masthead .main-navigation a,
+body.front-page:not(.dlx-scrolled) #masthead .main-navigation a {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65) !important;
+}
+
+
+/** NOTICIA PRINCIPAL **/
+/* TOP IMAGEM HOMEPAGE = full screen height (HOME ONLY) */
+:is(body.home, body.front-page, body.home.blog) .top-main-banner-wrap,
+:is(body.home, body.front-page, body.home.blog) .top-main-banner-item,
+:is(body.home, body.front-page, body.home.blog) .top-main-banner-item .post-thumb,
+:is(body.home, body.front-page, body.home.blog) .top-main-banner-item .post-thumb a {
+  height: 98vh;
+  height: 98svh;
+}
+
+:is(body.home, body.front-page, body.home.blog) .top-main-banner-item .post-thumb img {
+  width: 100%;
+  height: 100%;
+  max-height: none !important;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Reset everywhere else */
+body:not(.home):not(.front-page):not(.blog) .top-main-banner-wrap,
+body:not(.home):not(.front-page):not(.blog) .top-main-banner-item,
+body:not(.home):not(.front-page):not(.blog) .top-main-banner-item .post-thumb,
+body:not(.home):not(.front-page):not(.blog) .top-main-banner-item .post-thumb a {
+  height: auto;
+}
+
+body:not(.home):not(.front-page):not(.blog) .top-main-banner-item .post-thumb img {
+  height: auto;
+  max-height: 600px;
+  /* or whatever it was before */
+}
+
+
+
+/** ESPACO ENTRE HEADER E RESTO */
+/* 1) Default: give ALL pages space for the header */
+:root {
+  --dlx-header-offset: 110px;
+}
+
+/* <-- change this to your header height */
+
+body {
+  padding-top: var(--dlx-header-offset) !important;
+}
+
+/* 2) Homepage: remove the space so the header overlays the main post */
+body.home,
+body.front-page {
+  padding-top: 0 !important;
+}
+
+@media (min-width: 1300px) {
+  .digital-newspaper-container {
+    max-width: 1110px !important;
+  }
+
+  /* Keep your container width */
+  .digital-newspaper-container {
+    max-width: 1150px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Center the header contents (branding + menu) inside the full-width header */
+  header .site-branding-section,
+  header .main-navigation-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  header .site-branding-section>.digital-newspaper-container,
+  header .main-navigation-section>.digital-newspaper-container {
+    width: 100%;
+    max-width: 1110px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Only on pages whose body class contains "homesections-4columns-template" */
+body[class*="homesections-4columns-template"] .news-list-4col :is(.post-title a, .entry-title a) {
+  font-size: var(--smaller-title-font-size) !important;
+  line-height: var(--smaller-title-font-height) !important;
+  display: block;
+  /* so padding/spacing actually shows */
+}
+
+/* If your theme uses .post-excerpt for the text under the title */
+body[class*="homesections-4columns-template"] .news-list-4col .post-excerpt,
+body[class*="homesections-4columns-template"] .news-list-4col .post-excerpt p {
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+
+/** ULTIMAS NOTICIAS HOMEPAGE PADDINGS */
+/* Only: <h2 class="post-title smaller-tittle title-no-image"> */
+.post-title.smaller-tittle.title-no-image {
+  margin: 0 !important;
+}
+
+/* If the theme adds spacing on the link inside */
+.post-title.smaller-tittle.title-no-image>a {
+  margin: 0 !important;
+}
+
+/** TIRAR MARGIN TAGS **/
+.cat-item {
+  margin: 0px !important;
+}
+
+/** TIRAR PADDING **/
+.no-padding {
+  padding: 0px !important;
+}
+
+/** NO MARGIN **/
+.no-margin {
+  margin: 0px !important;
+}
+
+.t2 {
+  font-size: var(--font-size-t2) !important;
+  line-height: var(--line-height-t2) !important;
+}
+
+.margin-bottom {
+  margin-bottom: 20px !important;
+}
+
+/** MENU COR PODCASTS VIDEOS FOTOGRAFIA */
+/* Header style ONLY on these category pages */
+/* Podcasts + Videos + Fotografia: force dark header background */
+/* =========================================================
+   DLX: Dark header + anti-white-flash (podcasts/videos/fotografia)
+   ========================================================= */
+
+body:is(.category-podcasts, .category-videos, .category-fotografia) {
+  --dlx-dark: #171717;
+  --dlx-top-cover: 260px;
+  /* how far down the anti-flash dark bg goes */
+  --dlx-pull-up: 220vh;
+  /* how far .post-vids-bg paints upward */
+  position: relative;
+}
+
+/* Anti-white-flash: dark layer at top of the PAGE (scrolls away) */
+body:is(.category-podcasts, .category-videos, .category-fotografia)::before {
+  content: "";
+  position: absolute;
+  /* <-- key change (was fixed) */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--dlx-top-cover);
+  background: var(--dlx-dark);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Keep header above the anti-flash layer */
+body:is(.category-podcasts, .category-videos, .category-fotografia) header {
+  position: relative;
+  z-index: 10;
+}
+
+/* Header bar styling */
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section {
+  background: var(--dlx-dark) !important;
+  background-image: none !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 20;
+}
+
+/* If theme uses overlay pseudo-elements */
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section::before,
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section::after {
+  background: var(--dlx-dark) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* White text + links + icons in the header */
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section,
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section a {
+  color: #fff !important;
+}
+
+body:is(.category-podcasts, .category-videos, .category-fotografia) .site-branding-section svg {
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+/* Logo image invert (if it's <img class="custom-logo">) */
+body:is(.category-podcasts, .category-videos, .category-fotografia) .custom-logo {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* =========================================================
+   Post section background that "paints upward" behind header
+   ========================================================= */
+
+body:is(.category-podcasts, .category-videos, .category-fotografia) .post-vids-bg {
+  position: relative;
+  overflow: visible;
+}
+
+body:is(.category-podcasts, .category-videos, .category-fotografia) .post-vids-bg::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--dlx-pull-up));
+  height: var(--dlx-pull-up);
+  background: var(--dlx-dark);
+  z-index: 0;
+  pointer-events: none;
+}
+
+body:is(.category-podcasts, .category-videos, .category-fotografia) .post-vids-bg>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* Create a stacking context so we can safely put ::before behind everything */
+body:is(.category-podcasts, .category-videos, .category-fotografia) {
+  position: relative;
+  isolation: isolate;
+  /* key */
+}
+
+/* Dark strip goes behind ALL content */
+body:is(.category-podcasts, .category-videos, .category-fotografia)::before {
+  z-index: -1;
+  /* key */
+  pointer-events: none;
+}
+
+/** TITULO GRANDE DA NOTICIA PRINCIPAL DA HOMEPAGE **/
+/* If the H2 itself has the class */
+.top-main-banner-item .post-title a{
+  font-size: 45px;      /* change this */
+  line-height: 1.1;
+}
+
+/* Só no banner principal da home */
+body.home .top-main-banner-inner .dn-narrow-wrap,
+body.front-page .top-main-banner-inner .dn-narrow-wrap{
+  max-width: 700px !important;   /* <-- troca para o que queres */
+  width: 100%;
+}
+
+/* ENTRADA MAIN POST HOMEPAGE SMALLER*/
+body.home .top-main-banner-inner .post-excerpt,
+body.front-page .top-main-banner-inner .post-excerpt{
+  max-width: 570px !important;
+}
+
+
+
+
+/** DESTAQUE BORDER COLORIDO ARTIGO **/
+/* Destaque: top + bottom "border" using the category pill color */
+.top-main-banner-item{
+  position: relative;
+}
+
+.top-main-banner-item::before,
+.top-main-banner-item::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  height:3px;                 /* thickness */
+  background: var(--cat-accent, transparent);
+  pointer-events:none;
+}
+
+.top-main-banner-item::before{ top:0; }
+.top-main-banner-item::after{ bottom:0; }
+
+/** WIDTH ARTIGO **/
+body.single-post .digital-newspaper-container{
+  max-width: 1400px !important; /* <-- pick your size */
+  margin-top: 60px;
+}
+
+.entry-header .entry-header--with-thumb {
+    padding-bottom: 20px;
+  }
+
+/* SINGLE header 60/40 on big screens */
+@media (min-width: 1201px) {
+  .entry-header .entry-header--with-thumb {
+    padding-bottom: 20px;
+  }
+
+  .single .entry-header.entry-header--with-thumb .entry-header-inner{
+    display: flex; /* just in case */
+  }
+
+  .single .entry-header.entry-header--with-thumb .entry-header-media{
+    flex: 0 0 60% !important;
+    max-width: 60% !important;
+    min-width: 0;
+  }
+
+  .single .entry-header.entry-header--with-thumb .entry-header-content{
+    flex: 0 0 40% !important;
+    max-width: 40% !important;
+    min-width: 0;
+  }
+}
