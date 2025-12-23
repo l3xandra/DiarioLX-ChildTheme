@@ -99,8 +99,27 @@ get_template_part('inc/section_title', null, [
 get_template_part('template-parts/main-sections/home-section-4cols-no-image');
 
 
+/***
+ * LISBOA CIDADE ABERTA TITULO
+ */
+$slug = 'lisboacidadeaberta';
+$term = get_category_by_slug($slug);
+
+$color = ($term && !is_wp_error($term))
+  ? dlx_get_theme_category_color($term->term_id)
+  : '#49D3FF';
+
+
+get_template_part('inc/section-title-bigger', null, [
+  'title'     => 'Lisboa, Cidade Aberta',
+  'link'      => "/category/$slug/",
+  'color'     => $color,
+  'font_size' => '45px',
+]);
+
+
 /**
- * MAIN BANNER - SECCAO IMPORTANTE - Lisboa, Cidade Aberta
+ * MAIN BANNER - SECCAO IMPORTANTE - Lisboa, Cidade Aberta - MAIN POST
  */
 /**if (is_home() && is_front_page()) {
 	do_action('digital_newspaper_main_banner_hook');
@@ -112,11 +131,45 @@ get_template_part('template-parts/main-banner/template-full-img', null, [
   'font_size' => '50px',
 ]);
 
+/**
+ * LCA - NEXT POSTS
+ */
+
+get_template_part(
+	'template-parts/main-sections/home-sections-text-side',
+	null,
+	[
+		'category' => 'lisboacidadeaberta'
+	]
+);
+
+echo '<div style="margin-top:70px;">';
+
+
+/**** SECCOES */
+get_template_part('inc/section_title', null, [
+	'title' => 'Secções',
+	'link' => '/category/seccoes/',
+	'color' => '#000000' // ← dynamic color here!
+]);
+
+get_template_part(
+	'template-parts/main-sections/home-template-seccoes',
+	null,
+	[
+		'category' => 'seccoes'
+	]
+);
+
+
+echo '<div style="margin-top:50px;">';
+
+
 
 /***
  * SECCAO - SECCOES: Internacional, Politica, Sociedade, Economia
  */
-get_template_part(
+/*get_template_part(
     'template-parts/main-sections/home-sections-4cols-template',
     null,
     [
@@ -145,7 +198,7 @@ get_template_part(
             '#000000'
         ]
     ]
-);
+);*/
 
 
 
@@ -178,12 +231,15 @@ get_template_part('inc/section_title', null, [
 ]);
 
 get_template_part(
-	'template-parts/main-sections/home-sections-template',
+	'template-parts/main-sections/home-sections-text-other-side',
 	null,
 	[
 		'category' => 'especiais'
 	]
 );
+
+echo '<div style="margin-top:60px;">';
+
 
 /** SECCAO - Fotografia + TITULO*/
 get_template_part('inc/section_title', null, [
@@ -199,6 +255,10 @@ get_template_part(
 		'category' => 'fotografia'
 	]
 );
+
+
+
+
 
 /**
  * SECCAO PODCASTS

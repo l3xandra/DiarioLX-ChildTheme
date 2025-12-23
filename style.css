@@ -31,6 +31,13 @@ Updated: 2025-11-12 20:46:27
   --font-weight-tittle-smaller: 500;
   --font-size-t2: 25px;
   --line-height-t2: 32px;
+  --font-size-t1: 45px;
+  --line-height-t1: 1.1;
+  --font-size-t1B: 38px;
+  --line-height-t1B: 45px;
+  --font-size-t1C: 30px;
+  --line-height-t1C: 35px;
+  --grey:#d0cfcf;
 }
 
 body {
@@ -52,7 +59,7 @@ body {
 /*TITULO das seccoes na homepage*/
 .digital-newspaper-block-title {
   font-family: var(--font-family-base) !important;
-  font-size: 2rem !important;
+  font-size: 2rem;
   text-align: left;
   margin-bottom: 0;
 }
@@ -206,19 +213,81 @@ h2.digital-newspaper-block-title {
   max-width: 700px;
 }
 
-/*Retirar o estilo de links aos titulos da seccoes da homepage*/
-.my-main-banner-title a {
-  color: inherit;
-  /* usa a cor normal do título */
-  text-decoration: none;
-  /* remove underline */
+/* Default section titles */
+.digital-newspaper-block-title:not(.my-main-banner-title){
+  font-size: 2rem !important;
 }
 
-.my-main-banner-title a:hover {
+/* DLX section title (size + color driven by inline CSS vars) */
+.digital-newspaper-block-title.my-main-banner-title{
+  font-size: var(--section-title-size, 20px) !important;
+  color: var(--section-title-color, inherit);
+}
+
+/* Ensure inner wrappers can't lock font size */
+.digital-newspaper-block-title.my-main-banner-title > span,
+.digital-newspaper-block-title.my-main-banner-title a{
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Link styling */
+.digital-newspaper-block-title.my-main-banner-title a{
+  color: inherit;
   text-decoration: none;
-  /* mantém sem underline no hover */
+}
+
+.digital-newspaper-block-title.my-main-banner-title a:hover{
+  text-decoration: none;
   opacity: 0.85;
-  /* ou muda isto se quiseres outro efeito */
+}
+
+
+h2.digital-newspaper-block-title.my-main-banner-title{
+  font-size: var(--section-title-size, 20px) !important;
+}
+
+h2.digital-newspaper-block-title.my-main-banner-title a{
+  font-size: inherit !important;
+}
+
+/* Default section titles */
+.digital-newspaper-block-title:not(.my-main-banner-title){
+  font-size: 2rem !important;
+}
+
+/* DLX section title */
+h2.digital-newspaper-block-title.my-main-banner-title{
+  font-size: var(--section-title-size, 32px) !important;
+  color: var(--section-title-color, inherit);
+
+  /* spacing so the border doesn't touch the text */
+  line-height: 1.15;
+  padding-bottom: .25em;
+  margin: 0 0 .6rem;
+
+  /* safety in case the theme is constraining the box */
+  height: auto !important;
+  overflow: visible !important;
+
+  border-bottom: 1px solid var(--section-title-color, currentColor) !important;
+}
+
+/* Make sure inner wrappers can't lock the size/line-height */
+h2.digital-newspaper-block-title.my-main-banner-title > span,
+h2.digital-newspaper-block-title.my-main-banner-title a{
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Link styling */
+h2.digital-newspaper-block-title.my-main-banner-title a{
+  color: inherit;
+  text-decoration: none;
+}
+
+h2.digital-newspaper-block-title.my-main-banner-title a:hover{
+  opacity: 0.85;
 }
 
 /**
@@ -570,16 +639,16 @@ h3.my-main-banner-title {
 
 /* Responsivo: em ecrãs pequenos, empilha tudo (autores em cima, texto em baixo) */
 
-  .single .single-layout-wrapper {
-    display: block;
-  }
+.single .single-layout-wrapper {
+  display: block;
+}
 
-  .single .single-authors-column {
-    width: auto;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: center;
-  }
+.single .single-authors-column {
+  width: auto;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
 
 
 .p {
@@ -637,13 +706,13 @@ a:visited {
 }
 
 /* NÃO metas color no wrapper */
-.single .single-authors-list{
+.single .single-authors-list {
   color: inherit !important;
 }
 
 /* Cor só nos links dos autores (inclui visited) */
 .single .single-authors-list a.author_name,
-.single .single-authors-list a.author_name:visited{
+.single .single-authors-list a.author_name:visited {
   color: var(--dlx-cat-accent, #171717) !important;
 }
 
@@ -1348,6 +1417,13 @@ body[class*="homesections-4columns-template"] .news-list-4col .post-excerpt p {
   line-height: var(--line-height-t2) !important;
 }
 
+.t1B {
+  font-size: var(--font-size-t1B) !important;
+  line-height: var(--line-height-t1B) !important;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
 .margin-bottom {
   margin-bottom: 20px !important;
 }
@@ -1463,21 +1539,23 @@ body:is(.category-podcasts, .category-videos, .category-fotografia)::before {
 
 /** TITULO GRANDE DA NOTICIA PRINCIPAL DA HOMEPAGE **/
 /* If the H2 itself has the class */
-.top-main-banner-item .post-title a{
-  font-size: 45px;      /* change this */
-  line-height: 1.1;
+.top-main-banner-item .post-title a {
+  font-size: var(--font-size-t1);
+  /* change this */
+  line-height: var(--line-height-t1);
 }
 
 /* Só no banner principal da home */
 body.home .top-main-banner-inner .dn-narrow-wrap,
-body.front-page .top-main-banner-inner .dn-narrow-wrap{
-  max-width: 700px !important;   /* <-- troca para o que queres */
+body.front-page .top-main-banner-inner .dn-narrow-wrap {
+  max-width: 700px !important;
+  /* <-- troca para o que queres */
   width: 100%;
 }
 
 /* ENTRADA MAIN POST HOMEPAGE SMALLER*/
 body.home .top-main-banner-inner .post-excerpt,
-body.front-page .top-main-banner-inner .post-excerpt{
+body.front-page .top-main-banner-inner .post-excerpt {
   max-width: 570px !important;
 }
 
@@ -1486,32 +1564,40 @@ body.front-page .top-main-banner-inner .post-excerpt{
 
 /** DESTAQUE BORDER COLORIDO ARTIGO **/
 /* Destaque: top + bottom "border" using the category pill color */
-.top-main-banner-item{
+.top-main-banner-item {
   position: relative;
 }
 
 .top-main-banner-item::before,
-.top-main-banner-item::after{
-  content:"";
-  position:absolute;
-  left:0; right:0;
-  height:3px;                 /* thickness */
+.top-main-banner-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  /* thickness */
   background: var(--cat-accent, transparent);
-  pointer-events:none;
+  pointer-events: none;
 }
 
-.top-main-banner-item::before{ top:0; }
-.top-main-banner-item::after{ bottom:0; }
+.top-main-banner-item::before {
+  top: 0;
+}
+
+.top-main-banner-item::after {
+  bottom: 0;
+}
 
 /** WIDTH ARTIGO **/
-body.single-post .digital-newspaper-container{
-  max-width: 1400px !important; /* <-- pick your size */
+body.single-post .digital-newspaper-container {
+  max-width: 1400px !important;
+  /* <-- pick your size */
   margin-top: 60px;
 }
 
 .entry-header .entry-header--with-thumb {
-    padding-bottom: 20px;
-  }
+  padding-bottom: 20px;
+}
 
 /* SINGLE header 60/40 on big screens */
 @media (min-width: 1201px) {
@@ -1519,19 +1605,316 @@ body.single-post .digital-newspaper-container{
     padding-bottom: 20px;
   }
 
-  .single .entry-header.entry-header--with-thumb .entry-header-inner{
-    display: flex; /* just in case */
+  .single .entry-header.entry-header--with-thumb .entry-header-inner {
+    display: flex;
+    /* just in case */
   }
 
-  .single .entry-header.entry-header--with-thumb .entry-header-media{
+  .single .entry-header.entry-header--with-thumb .entry-header-media {
     flex: 0 0 60% !important;
     max-width: 60% !important;
     min-width: 0;
   }
 
-  .single .entry-header.entry-header--with-thumb .entry-header-content{
+  .single .entry-header.entry-header--with-thumb .entry-header-content {
     flex: 0 0 40% !important;
     max-width: 40% !important;
     min-width: 0;
   }
 }
+
+/** SECCAO LISBOA CIDADE ABERTA HOMEPAGE */
+
+/* =========================================================
+   LCA HOMEPAGE BANNER (overlay + full-width gradient + centered inner width)
+   HTML:
+   .post-element.lca-homepage
+     -> .back-to-normal-width (centered, 1200)
+        -> .dn-narrow-wrap (left, optional 700)
+   ========================================================= */
+
+/* Wider container for this section */
+.digital-newspaper-container.digital-newspaper-container-larger {
+  max-width: 1400px !important;
+}
+
+/* Make sure banner item is the positioning context */
+.top-main-banner-item {
+  position: relative;
+}
+
+/* Overlay: FULL width of the banner (so gradient matches image width) */
+.top-main-banner-item .post-element.lca-homepage {
+  position: absolute;
+  bottom: 0;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+
+  width: 100% !important;
+  max-width: none !important; /* override .digital-newspaper-container caps */
+
+  color: #fff;
+  z-index: 5;
+
+  text-align: left !important;
+}
+
+/* Gradient: fills overlay area (width = banner, height = overlay) */
+.top-main-banner-item .post-element.lca-homepage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.85) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Center the "normal width" wrapper inside the full-width overlay */
+.top-main-banner-item .post-element.lca-homepage .back-to-normal-width {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* optional: gives breathing room away from the edges */
+  padding-left: 40px;
+  padding-right: 40px;
+
+  text-align: left !important;
+}
+
+/* Keep the inner text block SMALL and LEFT (adjust to taste) */
+.top-main-banner-item .post-element.lca-homepage .back-to-normal-width .dn-narrow-wrap {
+  width: 100%;
+  max-width: 700px;   /* <-- change this if you want */
+  margin: 0 !important; /* left, NOT centered */
+  padding-left: 0;
+  padding-right: 0;
+
+  text-align: left !important;
+}
+
+/* Ensure meta + title links stay white inside this overlay */
+.top-main-banner-item .post-element.lca-homepage .post-meta,
+.top-main-banner-item .post-element.lca-homepage .post-meta a,
+.top-main-banner-item .post-element.lca-homepage .post-title a {
+  color: #fff !important;
+}
+
+
+/*** LISBOA CIDADE ABERTA BORDER **/
+h2.digital-newspaper-block-title.bigger-border{
+  border-bottom: 3px solid var(--section-title-color, currentColor) !important;
+}
+
+
+/** LCA shorter height **/
+/* SHORT variant only inside the LCA container */
+:is(body.home, body.front-page, body.home.blog)
+.digital-newspaper-container.lca-shorter
+:is(.top-main-banner-wrap,
+    .top-main-banner-item,
+    .top-main-banner-item .post-thumb,
+    .top-main-banner-item .post-thumb a){
+  height: 70svh !important; /* change */
+}
+
+/* keep the image filling */
+:is(body.home, body.front-page, body.home.blog)
+.digital-newspaper-container.lca-shorter
+.top-main-banner-item .post-thumb img{
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover;
+}
+
+
+/*** LCA - IMAGE TEXT SIDE BY SIDE **/
+/* NEW replacement for .primary-content just for this block */
+/* row + gutter */
+.lca-blaze-box-row{
+  display: flex;
+  align-items: center;      /* ou flex-start */
+  gap: 40px;                /* gutter */
+  width: 100%;
+}
+
+/* imagem = 1/3 */
+.lca-blaze-box-row > .post-thumb-wrap{
+  flex: 0 0 calc(41.6667% - 8.3333px); /* tira 5/12 do gap (20px * 5/12) */
+  margin: 0;
+}
+
+/* garante que a imagem ocupa o espaço todo do 1/3 */
+.lca-blaze-box-row > .post-thumb-wrap img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* texto = resto */
+.lca-blaze-box-row > .post-element{
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* opcional: mobile empilha */
+@media (max-width: 600px){
+  .lca-blaze-box-row{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lca-blaze-box-row > .post-thumb-wrap{
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+
+#theme-content .row .lca-primary-column{
+  width: 100%;
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Force the posts list to stack vertically (kills grid/row layouts) */
+#theme-content .row .lca-primary-column .news-list-wrap{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px;
+}
+
+/* Safety: each item takes full width */
+#theme-content .row .lca-primary-column .news-list-wrap > *{
+  width: 100%;
+  min-width: 0;
+}
+
+/** SECCOES LAYOUTS **/
+/* ===== BATCH LAYOUT (2 rows stacked in a column) ===== */
+.lca-batches{
+  display: flex;
+  flex-direction: column; /* stack row 1 + row 2 */
+  gap: 30px;              /* vertical gap between the two rows */
+}
+
+/* each row */
+.lca-batch-row{
+  display: flex;
+  gap: 30px;              /* horizontal gap inside each row */
+}
+
+.border-gray {
+      border-bottom: 1px solid var(--grey) !important;
+}
+
+/* =========================
+   ROW 1 (top): 3/4 + 1/4
+   ========================= */
+.lca-row-top .lca-col-left{
+  flex: 0 0 calc(75% - 15px);
+  min-width: 0;
+}
+
+.lca-row-top .lca-col-right{
+  flex: 0 0 calc(25% - 15px);
+  min-width: 0;
+}
+
+/* =========================
+   ROW 2 (bottom): adjust if you want
+   (default: same ratio as row 1)
+   ========================= */
+.lca-row-bottom .lca-col-left{
+  flex: 0 0 calc(75% - 15px);
+  min-width: 0;
+}
+
+.lca-row-bottom .lca-col-right{
+  flex: 0 0 calc(25% - 15px);
+  min-width: 0;
+}
+
+/* 4 + 5 stacked */
+.lca-slot-45{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* mobile */
+@media (max-width: 900px){
+  .lca-batch-row{
+    flex-direction: column;
+  }
+
+  .lca-row-top .lca-col-left,
+  .lca-row-top .lca-col-right,
+  .lca-row-bottom .lca-col-left,
+  .lca-row-bottom .lca-col-right{
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+
+/*** SECCOES **/
+/* ===== Feature layout: text (1/3) + image (2/3) ===== */
+.dlx-feature-row{
+  display: flex;
+  gap: 30px;
+  align-items: flex-start; /* IMPORTANT: don't stretch heights */
+}
+
+.dlx-feature-text{
+  flex: 0 0 calc(33.333% - 15px);
+  min-width: 0;
+}
+
+/* image takes 2/3 width + forced 2x3 ratio */
+.dlx-feature-figure{
+  flex: 0 0 calc(66.666% - 15px);
+  min-width: 0;
+  margin: 0;
+
+  aspect-ratio: 3 / 2;   /* 2x3 portrait */
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.dlx-feature-figure a{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dlx-feature-figure img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* mobile */
+@media (max-width: 900px){
+  .dlx-feature-row{
+    flex-direction: column;
+  }
+
+  .dlx-feature-text,
+  .dlx-feature-figure{
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.t1C {
+  font-size: var(--font-size-t1C);
+  line-height: var(--line-height-t1C);
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+

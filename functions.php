@@ -775,3 +775,16 @@ add_action('enqueue_block_editor_assets', function () {
     wp_add_inline_script('wp-data', $js, 'after');
 }, 20);
 
+
+function dlx_get_theme_category_color($term_id, $fallback = '#49D3FF') {
+  $data = DN\digital_newspaper_get_customizer_option('category_' . absint($term_id) . '_color');
+
+  if (is_array($data) && !empty($data['color'])) {
+    return function_exists('digital_newspaper_get_color_format')
+      ? digital_newspaper_get_color_format($data['color'])
+      : $data['color'];
+  }
+
+  return $fallback;
+}
+
