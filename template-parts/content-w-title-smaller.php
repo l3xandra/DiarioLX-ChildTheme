@@ -24,7 +24,9 @@ $custom_color = $args['custom_color'] ?? '#49D3FF';
         }
         ?>
 
-        <div style="margin-bottom: 12px;"></div>
+        <?php if (!empty($args['custom_section'])): ?>
+            <div style="margin-bottom: 12px;"></div>
+        <?php endif; ?>
 
         <figure class="post-thumb-wrap <?php if (!has_post_thumbnail()) { echo 'no-feat-img'; } ?>">
             <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
@@ -43,6 +45,9 @@ $custom_color = $args['custom_color'] ?? '#49D3FF';
             <h2 class="post-title smaller-tittle">
                 <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
             </h2>
+            <?php if (function_exists('dlx_render_post_authors')) {
+                dlx_render_post_authors(get_the_ID());
+            } ?>
 
             <div class="post-meta">
             </div>

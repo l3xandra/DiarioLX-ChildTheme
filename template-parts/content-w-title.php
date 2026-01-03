@@ -43,6 +43,9 @@ $custom_color = $args['custom_color'] ?? '#49D3FF';
             <h2 class="post-title">
                 <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
             </h2>
+            <?php if (function_exists('dlx_render_post_authors')) {
+                dlx_render_post_authors(get_the_ID());
+            } ?>
 
             <div class="post-meta">
             </div>

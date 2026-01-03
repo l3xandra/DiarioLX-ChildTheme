@@ -16,6 +16,9 @@
       </h2>
 
       <div class="post-excerpt main-post-home-lead"><?php the_excerpt(); ?></div>
+      <?php if (function_exists('dlx_render_post_authors')) {
+        dlx_render_post_authors(get_the_ID());
+      } ?>
 
     </div>
 

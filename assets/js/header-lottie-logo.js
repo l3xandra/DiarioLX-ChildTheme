@@ -8,28 +8,16 @@
 
   const attach = () => {
     if (attached) return;
-
     const d = el.dotLottie;
+    if (!d) return;
 
     
 
     // Fit behavior inside the canvas
     d.setLayout({ fit: 'contain', align: [0.5, 0.5] }); // or 'cover' if you have lots of empty padding
     d.setRenderConfig({ autoResize: true });
-
-    // Compute a proper width from the animation’s native aspect ratio
-    const { width, height } = d.animationSize();
-    const targetH = 150; // must match your CSS height above
-    const targetW = Math.round(targetH * (width / height));
-
-    el.style.height = `${targetH}px`;
-    el.style.width = `${targetW}px`;
-
-    // Force the renderer to match the element’s new size
-    d.resize();
-
-
-    if (!d) return; // ainda não está ready
+    // Force the renderer to match the element’s CSS size
+    requestAnimationFrame(() => d.resize());
 
     attached = true;
 
@@ -98,5 +86,3 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   apply();
 })();
-
-

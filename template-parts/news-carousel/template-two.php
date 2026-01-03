@@ -71,6 +71,9 @@ extract($args);
                                 <div class="post-element-inner">
                                     <h2 class="post-title white-font"><a href="<?php the_permalink(); ?>"
                                             title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+                                    <?php if (function_exists('dlx_render_post_authors')) {
+                                        dlx_render_post_authors(get_the_ID());
+                                    } ?>
                                     <div class="post-meta">
                                        
                                         <?php if ($options->commentOption)

@@ -106,15 +106,15 @@ $slug = 'lisboacidadeaberta';
 $term = get_category_by_slug($slug);
 
 $color = ($term && !is_wp_error($term))
-  ? dlx_get_theme_category_color($term->term_id)
-  : '#49D3FF';
+	? dlx_get_theme_category_color($term->term_id)
+	: '#49D3FF';
 
 
 get_template_part('inc/section-title-bigger', null, [
-  'title'     => 'Lisboa, Cidade Aberta',
-  'link'      => "/category/$slug/",
-  'color'     => $color,
-  'font_size' => '45px',
+	'title' => 'Lisboa, Cidade Aberta',
+	'link' => "/category/$slug/",
+	'color' => $color,
+	'font_size' => '45px',
 ]);
 
 
@@ -126,9 +126,9 @@ get_template_part('inc/section-title-bigger', null, [
 }**/
 
 get_template_part('template-parts/main-banner/template-full-img', null, [
-  'category'  => 'lisboacidadeaberta',
-  'title'     => 'Lisboa, Cidade Aberta',
-  'font_size' => '50px',
+	'category' => 'lisboacidadeaberta',
+	'title' => 'Lisboa, Cidade Aberta',
+	'font_size' => '50px',
 ]);
 
 /**
@@ -170,34 +170,34 @@ echo '<div style="margin-top:50px;">';
  * SECCAO - SECCOES: Internacional, Politica, Sociedade, Economia
  */
 /*get_template_part(
-    'template-parts/main-sections/home-sections-4cols-template',
-    null,
-    [
-        'categories' => [
-            'mundo',
-            'politica',
-            'sociedade',
-            'economia'
-        ],
-        'article_titles' => [
-            'Mundo',
-            'Política',
-            'Sociedade',
-            'Economia'
-        ],
-        'article_links'  => [
-            '/category/mundo/',
-            '/category/politica/',
-            '/category/sociedade/',
-            '/category/economia/'
-        ],
-        'article_colors' => [
-            '#000000',
-            '#000000',
-            '#000000',
-            '#000000'
-        ]
-    ]
+	'template-parts/main-sections/home-sections-4cols-template',
+	null,
+	[
+		'categories' => [
+			'mundo',
+			'politica',
+			'sociedade',
+			'economia'
+		],
+		'article_titles' => [
+			'Mundo',
+			'Política',
+			'Sociedade',
+			'Economia'
+		],
+		'article_links'  => [
+			'/category/mundo/',
+			'/category/politica/',
+			'/category/sociedade/',
+			'/category/economia/'
+		],
+		'article_colors' => [
+			'#000000',
+			'#000000',
+			'#000000',
+			'#000000'
+		]
+	]
 );*/
 
 
@@ -248,15 +248,11 @@ get_template_part('inc/section_title', null, [
 	'color' => '#000000' // ← dynamic color here!
 ]);
 
-get_template_part(
-	'template-parts/main-sections/home-sections-template',
-	null,
-	[
-		'category' => 'fotografia'
-	]
-);
-
-
+if (is_home() && is_front_page()) {
+	echo '<div class="fotografia-main-banner">';
+	do_action('digital_newspaper_main_banner_hook');
+	echo '</div>';
+}
 
 
 

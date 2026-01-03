@@ -37,6 +37,19 @@ if (!function_exists('chld_thm_cfg_parent_css')):
 endif;
 add_action('wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10);
 
+
+
+/**
+ * CATEGORY COLOR HOVER (TITLE + EXCERPT)
+ */
+if ( ! function_exists( 'dlx_enqueue_category_hover_script' ) ) {
+    function dlx_enqueue_category_hover_script() {
+        $src = get_stylesheet_directory_uri() . '/assets/js/category-hover-color.js';
+        wp_enqueue_script( 'dlx-category-hover', $src, array(), '1.0.0', true );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'dlx_enqueue_category_hover_script', 20 );
+
 // END ENQUEUE PARENT ACTION
 
 
@@ -45,11 +58,6 @@ add_action('wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10);
  * ADD TITLE TO LISBOA, CIDADE ABERTA
  */
 add_action('digital_newspaper_main_banner_hook', function () {
-    get_template_part('inc/section_title', null, [
-        'title' => 'Lisboa, Cidade Aberta',
-        'link' => '/category/lisboacidadeaberta/'
-    ]);
-
 }, 10);
 
 
@@ -292,6 +300,47 @@ echo '<span class="byline"> ' . implode(',&nbsp;', $author_links) . ' <span clas
         );
 
         echo '<span class="byline"> ' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+endif;
+
+/**
+ * Render authors row like single.php (POR + authors list).
+ */
+if ( ! function_exists( 'dlx_render_post_authors' ) ) :
+    function dlx_render_post_authors( $post_id = 0 ) {
+        $post_id = $post_id ? (int) $post_id : get_the_ID();
+        if ( ! $post_id || 'post' !== get_post_type( $post_id ) ) {
+            return;
+        }
+        $author_links = array();
+
+        // PublishPress Authors (multiple authors / guest authors).
+        if ( function_exists( 'get_multiple_authors' ) ) {
+            $authors = get_multiple_authors( $post_id );
+            if ( ! empty( $authors ) && is_array( $authors ) ) {
+                foreach ( $authors as $author ) {
+                    $author_links[] = sprintf(
+                        '<span class="author vcard"><a class="url fn n author_name" href="%s">%s</a></span>',
+                        esc_url( $author->link ),
+                        esc_html( $author->display_name )
+                    );
+                }
+            }
+        }
+
+        // Fallback: default single WP author.
+        if ( empty( $author_links ) ) {
+            $author_id = (int) get_post_field( 'post_author', $post_id );
+            $author_links[] = sprintf(
+                '<span class="author vcard"><a class="url fn n author_name" href="%s">%s</a></span>',
+                esc_url( get_author_posts_url( $author_id ) ),
+                esc_html( get_the_author_meta( 'display_name', $author_id ) )
+            );
+        }
+
+        echo '<div class="single-authors-row dlx-content-authors">';
+        echo '<div class="single-authors-list"><span class="byline">' . implode( ', ', $author_links ) . '</span></div>';
+        echo '</div>';
     }
 endif;
 
@@ -788,3 +837,73 @@ function dlx_get_theme_category_color($term_id, $fallback = '#49D3FF') {
   return $fallback;
 }
 
+
+
+/**
+ * FOOTER OVERRIDES
+ * Replace the markup in the functions below to build a custom footer.
+ */
+function escs_override_footer_hooks() {
+    remove_action( 'digital_newspaper_footer_hook', 'digital_newspaper_footer_widgets_area_part', 10 );
+
+    // Ensure our bottom footer runs before the parent callbacks.
+    add_action( 'digital_newspaper_botttom_footer_hook', 'escs_bottom_footer_override', 0 );
+
+    add_action( 'digital_newspaper_footer_hook', 'escs_footer_main', 10 );
+}
+add_action( 'after_setup_theme', 'escs_override_footer_hooks', 20 );
+
+function escs_footer_logo_block() {
+    $logo_base = get_stylesheet_directory_uri() . '/assets/logos/';
+    ?>
+    <div class="footer-logo" style="text-align: center; margin-bottom: 20px;">
+        <img src="<?php echo esc_url( $logo_base . 'LOGO_DLX_WHITE.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="display: block; margin: 0 auto; max-width: 150px; width: 100%; height: auto; margin-top: 30px;">
+        <div class="footer-social-row" style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 40px; padding-bottom: 30px; border-bottom: 0.5px solid #ffffff;">
+            <a href="<?php echo esc_url( 'https://twitter.com/diariolx' ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                <img src="<?php echo esc_url( $logo_base . 'twitter.svg' ); ?>" alt="Twitter" style="min-width: 30px; height: auto;">
+            </a>
+            <a href="<?php echo esc_url( 'https://instagram.com/diariolx' ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <img src="<?php echo esc_url( $logo_base . 'instagram.svg' ); ?>" alt="Instagram" style="min-width: 30px; height: auto;">
+            </a>
+            <a href="<?php echo esc_url( 'https://facebook.com/diariolx' ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <img src="<?php echo esc_url( $logo_base . 'facebook.svg' ); ?>" alt="Facebook" style="min-width: 30px; height: auto;">
+            </a>
+        </div>
+        <div class="footer-logo-row" style="display: flex; justify-content: center; align-items: center; gap: 35px; flex-wrap: wrap; margin-top: 20px; padding-bottom: 20px; border-bottom: 0.5px solid #ffffff;">
+            <span class="footer-logo-text footer-contact-text">diariolx@escs.ipl.pt<br>Campus de Benfica do IPL<br>1549-014 Lisboa</span>
+            <img src="<?php echo esc_url( $logo_base . 'LOGO_LIACOM.svg' ); ?>" alt="LIACOM" style="max-height: 200px; width: auto; height: auto;">
+            <span class="footer-logo-text">Laboratório de Tendências<br>em Jornalismo</span>
+            <img src="<?php echo esc_url( $logo_base . 'LOGO_ESCS.svg' ); ?>" alt="ESCS" style="max-height: 200px; width: auto; height: auto;">
+            <img src="<?php echo esc_url( $logo_base . 'logo_IPL.svg' ); ?>" alt="IPL" style="max-height: 200px; width: auto; height: auto;">
+        </div>
+        <div class="footer-copyright-row" style="margin-top: 20px; text-align: center; font-family: var(--font-family-base); font-size: 12px; color: #ffffff;">
+            &copy; Copyright <?php echo esc_html( date( 'Y' ) ); ?> · DiárioLX
+        </div>
+    </div>
+    <?php
+}
+
+function escs_footer_main() {
+    ?>
+    <div class="footer-widget column-one">
+        <?php escs_footer_logo_block(); ?>
+    </div>
+    <?php
+}
+
+function escs_bottom_footer_override() {
+    remove_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_botttom_footer_social_part', 10 );
+    remove_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_bottom_footer_inner_wrapper_open', 15 );
+    remove_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_bottom_footer_copyright_part', 20 );
+    remove_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_bottom_footer_menu_part', 30 );
+    remove_action( 'digital_newspaper_botttom_footer_hook', 'digital_newspaper_bottom_footer_inner_wrapper_close', 40 );
+
+    ?>
+    <div class="bottom-inner-wrapper">
+        <?php escs_footer_logo_block(); ?>
+        <?php
+        // TODO: add your custom bottom footer markup here.
+        ?>
+    </div>
+    <?php
+}

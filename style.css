@@ -149,6 +149,34 @@ h2.digital-newspaper-block-title {
   padding-top: 15px !important;
 }
 
+.banner-layout--six .row .main-banner-wrap {
+  flex: 1 0 100% !important;
+  max-width: 100% !important;
+  padding-right: 0 !important;
+}
+
+/* Template six: force 2:3 banner aspect ratio */
+.banner-layout--six .main-banner-wrap article .post-thumb {
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: 3 / 2;
+}
+
+/* Template six: allow full title without ellipsis */
+.banner-layout--six .main-banner-wrap .post-element .post-title {
+  overflow: visible;
+  text-overflow: unset;
+  display: block;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: initial;
+  width: auto;
+}
+
+/* Template six: custom padding for the text block */
+.banner-layout--six .main-banner-wrap .post-element.banner-six-info {
+  padding: 30px 25px 30px !important;
+}
+
 /**
 * TOP IMAGEM HOMAPAGE
 */
@@ -449,7 +477,7 @@ h3.my-main-banner-title {
 
 /* Extra padding ONLY for the main banner big story */
 .banner-layout--six .main-banner-wrap .slide-item .post-element {
-  padding: 20px 20px 25px !important;
+  padding: 20px 40px 40px !important;
   /* top right bottom left */
 }
 
@@ -739,6 +767,43 @@ a:visited {
   font-size: var(--small-text-font);
 }
 
+.dlx-content-authors {
+  margin-top: 0.4rem;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.dlx-content-authors .single-authors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 5px;
+}
+
+.dlx-content-authors .single-authors-list .byline {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dlx-content-authors .single-authors-list .author {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+.dlx-content-authors .single-authors-list a.author_name,
+.dlx-content-authors .single-authors-list a.author_name:visited {
+  color: var(--dlx-category-color, currentColor) !important;
+  text-decoration: none !important;
+  font-weight: 400;
+}
+
+/* Hide authors for podcasts, videos, and fotografia sections on home. */
+.dlx-hide-content-authors .dlx-content-authors,
+.fotografia-main-banner .dlx-content-authors {
+  display: none !important;
+}
+
 .entry-meta {
   margin-bottom: 0 !important;
 }
@@ -1002,7 +1067,7 @@ a.white-font:visited {
 
 /* LOGO SIZE */
 @media (min-width: 1024px) {
-  .site-header.layout--three .site-branding .custom-logo {
+  .site-header.layout--three .site-branding img.custom-logo {
     max-height: 80px !important;
     height: auto;
     width: auto;
@@ -1016,18 +1081,13 @@ header.site-header {
 
 /** LOGO ANIMADO */
 /* the theme expects the logo element to size itself; give it dimensions */
-
-
 .dlx-header-lottie {
-  width: 140px;
-  /* adjust */
-  height: 40px;
-  /* adjust */
   display: block;
 }
 
 .site-branding {
-  margin-bottom: 0 !important;
+  margin-top: -1% !important;
+  margin-bottom: -1% !important;
 }
 
 /* Keep the logo area tight */
@@ -1051,11 +1111,14 @@ header.site-header {
 /* 2) The Lottie element is the “real logo” — size it here */
 .site-branding dotlottie-wc.dlx-header-lottie {
   display: block;
-  height: 500px;
-  /* increase this */
+  height: 120px;
+  /* resize here */
+  aspect-ratio: 1024 / 639;
   width: auto;
   max-width: none !important;
   /* IMPORTANT: don't cap it */
+  transition: height 1s ease;
+  will-change: height;
 }
 
 /** STICKY MENU **/
@@ -1105,7 +1168,7 @@ body {
 
 /* Smooth shrink/grow */
 #masthead.site-header.layout--three .site-branding-section {
-  transition: padding .25s ease;
+  transition: padding 1s ease;
   padding: 18px 0;
   /* normal header height */
 }
@@ -1117,7 +1180,7 @@ body {
   transform: translateY(0);
   max-height: 300px;
   /* big enough for your menu */
-  overflow: hidden;
+  overflow: visible;
   transition: opacity .5s ease, transform .5s ease, max-height .5s ease;
 }
 
@@ -1126,6 +1189,10 @@ body {
 body.dlx-header-collapsed #masthead.site-header.layout--three .site-branding-section {
   padding: 6px 0;
   /* collapsed height = mostly logo */
+}
+
+body.dlx-header-collapsed #masthead.site-header.layout--three .site-branding dotlottie-wc.dlx-header-lottie {
+  height: 60px;
 }
 
 /* Hide menu links area (and search wrapper on layout--three) */
@@ -1170,9 +1237,6 @@ body.dlx-header-collapsed #masthead.site-header.layout--three .site-description 
 
 /* Show immediately + prevent the big flash by forcing a stable box */
 #dlxHeaderLottie {
-  width: 160px;
-  /* your final logo size */
-  height: auto;
   display: block;
   overflow: hidden;
   /* stops oversized first paint spilling out */
@@ -1194,7 +1258,7 @@ body.home #masthead a,
 body.front-page #masthead a,
 body.home #dlxHeaderLottie,
 body.front-page #dlxHeaderLottie {
-  transition: background-color .25s ease, color .25s ease, box-shadow .25s ease, filter .25s ease, text-shadow .25s ease;
+  transition: height 1s ease, background-color 1s ease, color 1s ease, box-shadow 1s ease, filter 1s ease, text-shadow 1s ease;
 }
 
 /* Overlay gradient layer (exists on homepage; fades out on scroll) */
@@ -1214,7 +1278,7 @@ body.front-page #masthead::before {
   pointer-events: none;
   z-index: 0;
   opacity: 1;
-  transition: opacity .25s ease;
+  transition: opacity .6s ease;
 
   /* feather bottom */
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) calc(100% - 50px), rgba(0, 0, 0, 0) 100%);
@@ -1263,6 +1327,22 @@ body.home:not(.dlx-scrolled) #masthead svg,
 body.front-page:not(.dlx-scrolled) #masthead svg {
   fill: #fff !important;
   stroke: #fff !important;
+}
+
+body.home:not(.dlx-scrolled) #masthead .search-wrap .search-trigger,
+body.front-page:not(.dlx-scrolled) #masthead .search-wrap .search-trigger,
+body.home:not(.dlx-scrolled) #masthead .search-wrap .search-trigger i,
+body.front-page:not(.dlx-scrolled) #masthead .search-wrap .search-trigger i {
+  color: #fff !important;
+}
+
+body.category-podcasts #masthead .search-wrap .search-trigger,
+body.category-videos #masthead .search-wrap .search-trigger,
+body.category-fotografia #masthead .search-wrap .search-trigger,
+body.category-podcasts #masthead .search-wrap .search-trigger i,
+body.category-videos #masthead .search-wrap .search-trigger i,
+body.category-fotografia #masthead .search-wrap .search-trigger i {
+  color: #fff !important;
 }
 
 /* Lottie only in the special state */
@@ -1823,6 +1903,38 @@ h2.digital-newspaper-block-title.bigger-border{
   min-width: 0;
 }
 
+/* Vertical divider between post 1 and post 3 (top row) */
+.lca-row-top{
+  gap: 0;
+}
+
+.lca-row-top .lca-col-left{
+  padding-right: 15px;
+  border-right: 1px solid var(--grey);
+}
+
+.lca-row-top .lca-col-right{
+  padding-left: 15px;
+}
+
+/* Extra spacing after the top row */
+.lca-row-top{
+  padding-bottom: 20px;
+}
+
+/* Keep category tag over the image for the right-top card */
+.lca-row-top .lca-col-right .post-thumb-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.lca-row-top .lca-col-right .post-thumb-wrap .post-categories {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+}
+
 /* =========================
    ROW 2 (bottom): adjust if you want
    (default: same ratio as row 1)
@@ -1835,6 +1947,20 @@ h2.digital-newspaper-block-title.bigger-border{
 .lca-row-bottom .lca-col-right{
   flex: 0 0 calc(25% - 15px);
   min-width: 0;
+}
+
+/* Vertical divider between post 2 and posts 4/5 (bottom row) */
+.lca-row-bottom{
+  gap: 0;
+}
+
+.lca-row-bottom .lca-col-left{
+  padding-right: 15px;
+  border-right: 1px solid var(--grey);
+}
+
+.lca-row-bottom .lca-col-right{
+  padding-left: 15px;
 }
 
 /* 4 + 5 stacked */
@@ -1917,4 +2043,129 @@ h2.digital-newspaper-block-title.bigger-border{
   margin-top: 10px;
 }
 
+footer.site-footer.dark_bk {
+  border-top: 0;
+}
 
+.footer-logo-text {
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  color: #ffffff;
+  text-align: left;
+  display: inline-block;
+}
+
+.footer-contact-text {
+  padding-right: 35px;
+  border-right: 0.5px solid #ffffff;
+}
+
+@media (max-width: 500px) {
+  .footer-contact-text {
+    display: block;
+    width: 100%;
+    padding-right: 0;
+    padding-bottom: 12px;
+    border-right: 0;
+    border-bottom: 0.5px solid #ffffff;
+    text-align: center;
+  }
+}
+
+/**
+* Disable parent image zoom-out hover effect (effect-six).
+*/
+body.digital-newspaper-image-hover--effect-six .post-thumb img,
+body.digital-newspaper-image-hover--effect-six .post-thumb-wrap img {
+  transform: scale(1) !important;
+  transition: none !important;
+}
+
+body.digital-newspaper-image-hover--effect-six .post-thumb:hover img,
+body.digital-newspaper-image-hover--effect-six .post-thumb-wrap:hover img {
+  transform: scale(1) !important;
+}
+
+/**
+* Remove hover lift on post blocks (effect-one).
+*/
+body.digital-newspaper-post-blocks-hover--effect-one .digital-newspaper-section .row .primary-content .blaze_box_wrap:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .full-width-section .row > div .blaze_box_wrap:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .bottom-full-width-section .row > div .blaze_box_wrap:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .banner-layout--five .main-banner-list-posts article:not(:first-child):hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget_digital_newspaper_author_info_widget .author-wrap:hover,
+body.digital-newspaper-post-blocks-hover--effect-one #theme-content article .blaze_box_wrap:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget .post-item:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget.widget_block:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget.widget_digital_newspaper_social_icons_widget .social-block-widget:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget.widget_nav_menu:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .widget.widget_meta ul:hover,
+body.digital-newspaper-post-blocks-hover--effect-one .row .news-carousel-post-wrap > div .blaze_box_wrap:hover {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  transform: none !important;
+}
+
+/**
+* Remove post title hover underline effects.
+*/
+body.digital-newspaper-title-one .post-title a:hover,
+body.digital-newspaper-title-one .news-carousel .post-title a:hover,
+body.digital-newspaper-title-three .post-title a:hover,
+body.digital-newspaper-title-three .news-carousel .post-title a:hover,
+body.digital-newspaper-title-four .post-title a:hover,
+body.digital-newspaper-title-four .news-carousel .post-title a:hover,
+body.digital-newspaper-title-five .post-title a:hover,
+body.digital-newspaper-title-five .news-carousel .post-title a:hover {
+  background-image: none !important;
+  background-size: 0 !important;
+  text-decoration: none !important;
+}
+
+/**
+* Hover: match title/excerpt color to category tag color.
+*/
+.dlx-category-hover .post-title a,
+.dlx-category-hover .post-excerpt,
+.dlx-category-hover .post-excerpt p,
+.dlx-category-hover .post-content,
+.dlx-category-hover .post-content p {
+  transition: color 0.3s ease;
+}
+
+.dlx-category-hover .post-title,
+.dlx-category-hover .post-title a {
+  transition: color 0.3s ease !important;
+}
+
+.dlx-category-hover:hover .post-title a,
+.dlx-category-hover:hover .post-title,
+.dlx-category-hover:hover .post-excerpt,
+.dlx-category-hover:hover .post-excerpt p,
+.dlx-category-hover:hover .post-content,
+.dlx-category-hover:hover .post-content p {
+  color: var(--dlx-category-color, inherit) !important;
+}
+
+/* Ensure LCA banner title can override the forced white color on hover */
+.top-main-banner-item .post-element.lca-homepage .dn-narrow-wrap.dlx-category-hover:hover .post-title a,
+.top-main-banner-item .post-element.lca-homepage .dn-narrow-wrap.dlx-category-hover:hover .post-title {
+  color: var(--dlx-category-color, inherit) !important;
+}
+
+/**
+* Fotografia main banner title sizing.
+*/
+.fotografia-main-banner .post-title,
+.fotografia-main-banner .post-title a {
+  font-size: var(--font-size-t1B);
+  line-height: var(--line-height-t1B);
+}
+
+/* Lighter hover color for Fotografia main banner title */
+.fotografia-main-banner .dlx-category-hover:hover .post-title,
+.fotografia-main-banner .dlx-category-hover:hover .post-title a {
+  color: #ffffff !important;
+  color: color-mix(in srgb, var(--dlx-category-color) 40%, #ffffff) !important;
+}

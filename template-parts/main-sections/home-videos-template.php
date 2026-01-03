@@ -19,7 +19,7 @@ $width = digial_newspaper_get_section_width_layout_val('bottom_full_width_blocks
 ?>
 
 <section id="bottom-full-width-section"
-         class="digital-newspaper-section bottom-full-width-section <?php echo esc_attr('width-' . $width); ?>">
+         class="digital-newspaper-section bottom-full-width-section dlx-hide-content-authors dlx-section-videos <?php echo esc_attr('width-' . $width); ?>">
 
     <div class="digital-newspaper-container">
         <div class="row">

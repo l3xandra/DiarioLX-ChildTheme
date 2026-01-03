@@ -62,6 +62,7 @@ $orderby = $args['orderby'] ?? 'date';
                         echo '</div>';
 
 
+                        echo '<div class="lca-col-right">';
                         if (!empty($posts[2])) { // "3rd post" in the top-right
                             $post = $posts[2];
                             setup_postdata($post);
@@ -70,6 +71,7 @@ $orderby = $args['orderby'] ?? 'date';
                                 get_post_type()
                             );
                         }
+                        echo '</div>';
 
                         echo '</div>';
 

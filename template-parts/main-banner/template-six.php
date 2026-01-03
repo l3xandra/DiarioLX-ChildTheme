@@ -14,123 +14,53 @@ $slider_args = $args['slider_args'];
         <?php
         $slider_args = apply_filters('digital_newspaper_query_args_filter', $slider_args);
         $slider_query = new WP_Query([
-            'posts_per_page' => 1,
+            'posts_per_page' => 4,
             'post_type' => 'post',
             'post_status' => 'publish',
             'orderby' => 'date',
             'order' => 'DESC',
-            'category_name' => 'lisboacidadeaberta'
+            'category_name' => 'fotografia'
         ]);
 
         if ($slider_query->have_posts()):
-
-            $slider_query->the_post();
-            ?>
-            <article class="slide-item <?php if (!has_post_thumbnail()) {
-                echo esc_attr('no-feat-img');
-            } ?>">
-                <figure class="post-thumb">
-                    <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-                        <?php
-                        if (has_post_thumbnail()) {
-                            the_post_thumbnail('digital-newspaper-featured', array(
-                                'title' => the_title_attribute(array(
-                                    'echo' => false
-                                ))
-                            ));
-                        }
-                        ?>
-                    </a>
-                </figure>
-                <?php /** TEXTO DA NOTICIA PRINCIPAL */ ?>
-                <div class="post-element-wrap">
-                    <div class="post-element">
-                        <div class="post-meta">
-                            <?php digital_newspaper_get_post_categories(get_the_ID(), 2); ?>
-                            
-                            
-                        </div>
-                        <h2 class="post-title white-font"><a href="<?php the_permalink(); ?>"
-                                title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
-                        <div class="post-excerpt"><?php the_excerpt(); ?></div>
-                        <?php
-                        /**
-                         * hook - digital_newspaper_main_banner_post_append_hook
-                         * 
-                         */
-                        ?>
-                    </div>
-                </div>
-            </article>
-            <?php
-
-            wp_reset_postdata();
-        endif;
-        ?>
-    </div>
-</div>
-
-<div
-    class="main-banner-trailing-posts <?php echo esc_attr('layout--' . DN\digital_newspaper_get_customizer_option('main_banner_six_trailing_posts_layout')); ?>">
-    <div class="trailing-posts-wrap">
-        <?php
-        $main_banner_six_trailing_posts_order_by = DN\digital_newspaper_get_customizer_option('main_banner_six_trailing_posts_order_by');
-        $listPostsOrderArray = explode('-', $main_banner_six_trailing_posts_order_by);
-        $main_banner_six_trailing_post_filter = DN\digital_newspaper_get_customizer_option('main_banner_six_trailing_post_filter');
-        $trailing_posts_args = [
-            'posts_per_page' => 3,
-            'post_type' => 'post',
-            'post_status' => 'publish',
-            'orderby' => 'date',
-            'order' => 'DESC',
-            'category_name' => 'lisboacidadeaberta'
-        ];
-
-        if ($main_banner_six_trailing_post_filter == 'category') {
-            $main_banner_six_trailing_posts_categories = json_decode(DN\digital_newspaper_get_customizer_option('main_banner_six_trailing_posts_categories'));
-            if ($main_banner_six_trailing_posts_categories)
-                $trailing_posts_args['category_name'] = digital_newspaper_get_categories_for_args($main_banner_six_trailing_posts_categories);
-        } else if ($main_banner_six_trailing_post_filter == 'title') {
-            $main_banner_six_trailing_posts = json_decode(DN\digital_newspaper_get_customizer_option('main_banner_six_trailing_posts'));
-            if ($main_banner_six_trailing_posts)
-                $trailing_posts_args['post_name__in'] = digital_newspaper_get_post_slugs_for_args($main_banner_six_trailing_posts);
-
-        }
-        $trailing_posts_args = apply_filters('digital_newspaper_query_args_filter', $trailing_posts_args);
-        $trailing_posts = get_posts($trailing_posts_args);
-
-        // skip the first post
-        $trailing_posts = array_slice($trailing_posts, 1);
-
-        if ($trailing_posts):
-            foreach ($trailing_posts as $trailing_post_key => $trailing_post):
-                $trailing_post_id = $trailing_post->ID;
+            while ($slider_query->have_posts()):
+                $slider_query->the_post();
                 ?>
-                <article class="post-item <?php if (!has_post_thumbnail($trailing_post_id)) {
-                    echo esc_attr(' no-feat-img');
+                <article class="slide-item <?php if (!has_post_thumbnail()) {
+                    echo esc_attr('no-feat-img');
                 } ?>">
                     <figure class="post-thumb">
-                        <?php if (has_post_thumbnail($trailing_post_id)): ?>
-                            <a href="<?php echo esc_url(get_the_permalink($trailing_post_id)); ?>">
-                                <img
-                                    src="<?php echo esc_url(get_the_post_thumbnail_url($trailing_post_id, 'digital-newspaper-list')); ?>" />
-                            </a>
-                        <?php endif; ?>
-                        <div class="post-element-wrap">
-                            <div class="post-element">
+                        <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+                            <?php
+                            if (has_post_thumbnail()) {
+                                the_post_thumbnail('digital-newspaper-featured', array(
+                                    'title' => the_title_attribute(array(
+                                        'echo' => false
+                                    ))
+                                ));
+                            }
+                            ?>
+                        </a>
+                    </figure>
+                    <?php /** TEXTO DA NOTICIA PRINCIPAL */ ?>
+                    <div class="post-element-wrap">
+                    <div class="post-element banner-six-info">
+                            <div class="dn-narrow-wrap">
                                 <div class="post-meta">
-                                    <?php digital_newspaper_get_post_categories($trailing_post_id, 2); ?>
-                             
+                                    <?php digital_newspaper_get_post_categories(get_the_ID(), 2); ?>
                                 </div>
-                                <h2 class="post-title white-font"><a
-                                        href="<?php the_permalink($trailing_post_id); ?>"><?php echo wp_kses(get_the_title($trailing_post_id), ['em' => [], 'strong' => [], 'span' => [], 'br' => []]); ?></a>
-                                </h2>
+                                <h2 class="post-title white-font"><a href="<?php the_permalink(); ?>"
+                                        title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+                                <?php if (function_exists('dlx_render_post_authors')) {
+                                    dlx_render_post_authors(get_the_ID());
+                                } ?>
                             </div>
                         </div>
-                    </figure>
+                    </div>
                 </article>
                 <?php
-            endforeach;
+            endwhile;
+            wp_reset_postdata();
         endif;
         ?>
     </div>
