@@ -55,8 +55,35 @@ if (have_posts()):
             }
 
             /**
+             * TAG: usa a cor da 1a categoria do 1o post do tag
+             */
+            if (is_tag()) {
+                global $wp_query;
+                $first_post = $wp_query->posts[0] ?? null;
+
+                if ($first_post && !empty($first_post->ID)) {
+                    $post_cats = get_the_category($first_post->ID);
+
+                    if (!empty($post_cats) && !is_wp_error($post_cats)) {
+                        $primary_cat = $post_cats[0];
+                        $categoria_color = dlx_get_theme_category_color($primary_cat->term_id, $categoria_color);
+                    }
+                }
+            }
+
+            /**
              * TÍTULO + COR
              */
+
+            $title_text = $categoria_name;
+            $title_font_size = '40px';
+            $title_font_weight = '500';
+
+            if (is_tag()) {
+                $title_text = 'Tag: ' . $categoria_name;
+                $title_font_size = '20px';
+                $title_font_weight = '600';
+            }
 
             $title_section = 'inc/section-title-page';
 
@@ -68,9 +95,10 @@ if (have_posts()):
                 $title_section,
                 null,
                 [
-                    'title' => $categoria_name,
+                    'title' => $title_text,
                     'color' => $categoria_color,
-                    'font_size' => '50px', // ajusta à vontade
+                    'font_size' => $title_font_size,
+                    'font_weight' => $title_font_weight,
                 ]
             );
 
@@ -118,11 +146,19 @@ if (have_posts()):
                         <div class="post-inner-wrapper news-list-wrap">
                             <?php
                             // Loop de posts
+                            $archive_index = 0;
                             while (have_posts()):
                                 the_post();
 
+                                if (is_category() && 0 === $archive_index) {
+                                    $archive_index++;
+                                    continue;
+                                }
+
                                 // Usa o content-{post_type}.php
                                 get_template_part('template-parts/content', get_post_type());
+
+                                $archive_index++;
                             endwhile;
 
                             /**

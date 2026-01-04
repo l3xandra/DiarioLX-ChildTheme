@@ -140,8 +140,9 @@ if (!function_exists('digital_newspaper_get_post_categories')):
         if ($tags && !is_wp_error($tags)) {
             $first_tag = $tags[0];
 
-            // 🔥 hard-code white text (não mexe no background)
-            $a_style = ' style="color:#ffffff !important;"';
+            $force_dark_tag = has_category(array('podcasts', 'videos'), $post_id);
+            $tag_text_color = $force_dark_tag ? '#171717' : '#ffffff';
+            $a_style = ' style="color:' . esc_attr($tag_text_color) . ' !important;"';
 
             echo '<ul class="post-categories">';
             echo '<li class="cat-item ' . esc_attr($cat_color_class) . '">'; // sem inline background
@@ -339,7 +340,7 @@ if ( ! function_exists( 'dlx_render_post_authors' ) ) :
         }
 
         echo '<div class="single-authors-row dlx-content-authors">';
-        echo '<div class="single-authors-list"><span class="byline">' . implode( ', ', $author_links ) . '</span></div>';
+        echo '<div class="single-authors-list"><span class="byline">' . implode( ',&nbsp;', $author_links ) . '</span></div>';
         echo '</div>';
     }
 endif;
