@@ -4,6 +4,8 @@ $link = $args['link'] ?? '';
 $color = $args['color'] ?? '#49D3FF'; // fallback default color
 $font_size = $args['font_size'] ?? '40px'; // e.g. "1.4rem" or "20px"
 $font_weight = $args['font_weight'] ?? '500';
+$icon = $args['icon'] ?? '';
+$icon_alt = $args['icon_alt'] ?? '';
 ?>
 
     <div class="pods-vids-BG">
@@ -12,15 +14,21 @@ $font_weight = $args['font_weight'] ?? '500';
                 <h3 class="digital-newspaper-block-title my-main-banner-title"
                     style="--section-title-color: <?php echo esc_attr($color); ?>; --section-title-size: <?php echo esc_attr($font_size); ?>; --section-title-weight: <?php echo esc_attr($font_weight); ?>;">
                     <span>
-
                         <?php if (!empty($link)): ?>
                             <a href="<?php echo esc_url(home_url($link)); ?>">
+                                <?php if (!empty($icon)): ?>
+                                    <img class="pods-title-icon" src="<?php echo esc_url($icon); ?>"
+                                        alt="<?php echo esc_attr($icon_alt); ?>" loading="lazy">
+                                <?php endif; ?>
                                 <?php echo esc_html($title); ?>
                             </a>
                         <?php else: ?>
+                            <?php if (!empty($icon)): ?>
+                                <img class="pods-title-icon" src="<?php echo esc_url($icon); ?>"
+                                    alt="<?php echo esc_attr($icon_alt); ?>" loading="lazy">
+                            <?php endif; ?>
                             <?php echo esc_html($title); ?>
                         <?php endif; ?>
-
                     </span>
                 </h3>
             </div>

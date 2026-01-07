@@ -86,9 +86,20 @@ if (have_posts()):
             }
 
             $title_section = 'inc/section-title-page';
+            $title_icon = '';
+            $title_icon_alt = '';
 
             if ($categoria_slug === 'podcasts' || $categoria_slug === 'videos') {
                 $title_section = 'inc/section-title-page-pods';
+            }
+
+            if ($categoria_slug === 'podcasts') {
+                $title_icon = get_stylesheet_directory_uri() . '/assets/icons/podcast_icon.svg';
+                $title_icon_alt = 'Podcast';
+            }
+            if ($categoria_slug === 'videos') {
+                $title_icon = get_stylesheet_directory_uri() . '/assets/icons/video_icon.svg';
+                $title_icon_alt = 'Video';
             }
 
             get_template_part(
@@ -99,6 +110,8 @@ if (have_posts()):
                     'color' => $categoria_color,
                     'font_size' => $title_font_size,
                     'font_weight' => $title_font_weight,
+                    'icon' => $title_icon,
+                    'icon_alt' => $title_icon_alt,
                 ]
             );
 

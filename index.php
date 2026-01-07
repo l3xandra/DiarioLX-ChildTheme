@@ -21,7 +21,9 @@ $top_post = new WP_Query([
 	'posts_per_page' => 1,
 	'post_type' => 'post',
 	'post_status' => 'publish',
-	'tag' => 'main-post'
+	'meta_key' => '_escs_is_main_article',
+	'meta_value' => 'yes',
+	'ignore_sticky_posts' => true,
 ]);
 
 if ($top_post->have_posts()):
@@ -77,12 +79,20 @@ endif;
 /**
  * SECCAO 3 noticias em destaque
  */
+$featured_posts = new WP_Query([
+	'post_type'      => 'post',
+	'posts_per_page' => 3,
+	'post_status'    => 'publish',
+	'meta_key'       => '_is_ns_featured_post',
+	'meta_value'     => 'yes',
+	'ignore_sticky_posts' => true,
+]);
 
 get_template_part(
 	'template-parts/main-sections/home-sections-template',
 	null,
 	[
-		'category' => 'lisboacidadeaberta'
+		'query' => $featured_posts
 	]
 );
 
@@ -115,6 +125,7 @@ get_template_part('inc/section-title-bigger', null, [
 	'link' => "/category/$slug/",
 	'color' => $color,
 	'font_size' => '45px',
+	'row_class' => 'section-title-row--bottom',
 ]);
 
 
@@ -125,8 +136,23 @@ get_template_part('inc/section-title-bigger', null, [
 	do_action('digital_newspaper_main_banner_hook');
 }**/
 
+$lca_slug = 'lisboacidadeaberta';
+$lca_top_post_id = 0;
+$lca_top_query = new WP_Query([
+	'posts_per_page' => 1,
+	'post_type' => 'post',
+	'post_status' => 'publish',
+	'category_name' => $lca_slug,
+]);
+
+if ($lca_top_query->have_posts()) {
+	$lca_top_query->the_post();
+	$lca_top_post_id = get_the_ID();
+}
+wp_reset_postdata();
+
 get_template_part('template-parts/main-banner/template-full-img', null, [
-	'category' => 'lisboacidadeaberta',
+	'category' => $lca_slug,
 	'title' => 'Lisboa, Cidade Aberta',
 	'font_size' => '50px',
 ]);
@@ -136,10 +162,11 @@ get_template_part('template-parts/main-banner/template-full-img', null, [
  */
 
 get_template_part(
-	'template-parts/main-sections/home-sections-text-side',
+	'template-parts/main-sections/home-sections-text-side-exclude',
 	null,
 	[
-		'category' => 'lisboacidadeaberta'
+		'category' => $lca_slug,
+		'exclude' => $lca_top_post_id ? [$lca_top_post_id] : [],
 	]
 );
 
@@ -254,6 +281,7 @@ if (is_home() && is_front_page()) {
 	echo '</div>';
 }
 
+echo '<div style="margin-top:60px;">';
 
 
 /**
@@ -266,15 +294,29 @@ get_template_part(
 	['category' => 'podcasts']
 );
 
+echo '<div style="margin-top:60px;">';
+
+
 /**
  * videos
  */
 
+get_template_part('inc/section_title', null, [
+	'title' => 'Vídeos',
+	'link' => '/category/videos/',
+	'color' => '#000000', // ← dynamic color here!
+	'view_all_text' => 'Ver todos',
+]);
+
 get_template_part(
-	'template-parts/main-sections/home-videos-template',
+	'template-parts/main-sections/home-sections-videos',
 	null,
-	['category' => 'videos']
+	[
+		'category' => 'videos'
+	]
 );
+
+echo '<div style="margin-top:60px;">';
 
 
 

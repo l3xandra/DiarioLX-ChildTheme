@@ -55,7 +55,7 @@ $custom_query = $args['query'] ?? null;
 
                         while ($latest_posts->have_posts()):
                             $latest_posts->the_post();
-                            get_template_part('template-parts/content', get_post_type());
+                            get_template_part('template-parts/content-videos-homepage', get_post_type());
                         endwhile;
 
                         echo '</div>';

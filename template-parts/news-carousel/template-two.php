@@ -28,7 +28,8 @@ extract($args);
         get_template_part('inc/section_title', null, [
             'title' => 'Podcasts',
             'link' => '/category/lisboacidadeaberta/',
-            'color' => '#000000' // ← dynamic color here!
+            'color' => '#000000', // ← dynamic color here!
+            'show_view_all' => false,
         ]);
         ?>
         <?php
@@ -51,7 +52,7 @@ extract($args);
                     echo esc_attr('no-feat-img');
                 } ?>">
                     <div class="blaze_box_wrap">
-                        <figure class="post-thumb-wrap">
+                        <figure class="post-thumb-wrap podcast-thumb-wrap">
 
                             <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
                                 <?php
@@ -64,6 +65,12 @@ extract($args);
                                 endif;
                                 ?>
                                 <div class="thumb-overlay"></div>
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <span class="podcast-thumb-icon" aria-hidden="true">
+                                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/icons/podcast_icon.svg'); ?>"
+                                            alt="" />
+                                    </span>
+                                <?php endif; ?>
                             </a>
                             <div class="post-element">
                                 <?php if ($options->categoryOption)

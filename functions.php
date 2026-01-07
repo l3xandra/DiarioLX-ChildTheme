@@ -50,7 +50,93 @@ if ( ! function_exists( 'dlx_enqueue_category_hover_script' ) ) {
 }
 add_action( 'wp_enqueue_scripts', 'dlx_enqueue_category_hover_script', 20 );
 
+/**
+ * AUTO COLLAPSE MENU WHEN IT WRAPS
+ */
+if ( ! function_exists( 'dlx_enqueue_menu_collapse_script' ) ) {
+    function dlx_enqueue_menu_collapse_script() {
+        $src = get_stylesheet_directory_uri() . '/assets/js/menu-collapse-on-wrap.js';
+        wp_enqueue_script( 'dlx-menu-collapse', $src, array(), '1.0.0', true );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'dlx_enqueue_menu_collapse_script', 25 );
+
 // END ENQUEUE PARENT ACTION
+
+
+/**
+ * MAIN ARTICLE META BOX
+ */
+function escs_add_main_article_metabox() {
+    add_meta_box(
+        'escs-main-article',
+        __( 'Artigo Principal', 'digital-newspaper-child' ),
+        'escs_render_main_article_metabox',
+        'post',
+        'side',
+        'high'
+    );
+}
+add_action( 'add_meta_boxes', 'escs_add_main_article_metabox' );
+
+function escs_render_main_article_metabox( $post ) {
+    wp_nonce_field( 'escs_main_article_meta', 'escs_main_article_meta_nonce' );
+    $is_main = ( get_post_meta( $post->ID, '_escs_is_main_article', true ) === 'yes' );
+    echo '<label>';
+    echo '<input type="checkbox" name="escs_main_article" value="yes" ' . checked( $is_main, true, false ) . ' /> ';
+    echo esc_html__( 'Marcar como artigo principal', 'digital-newspaper-child' );
+    echo '</label>';
+}
+
+function escs_save_main_article_meta( $post_id ) {
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( wp_is_post_revision( $post_id ) ) {
+        return;
+    }
+
+    if ( ! isset( $_POST['escs_main_article_meta_nonce'] ) ||
+        ! wp_verify_nonce( $_POST['escs_main_article_meta_nonce'], 'escs_main_article_meta' ) ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    $is_checked = ( isset( $_POST['escs_main_article'] ) && $_POST['escs_main_article'] === 'yes' );
+
+    static $updating = false;
+    if ( $updating ) {
+        return;
+    }
+    $updating = true;
+
+    if ( $is_checked ) {
+        update_post_meta( $post_id, '_escs_is_main_article', 'yes' );
+
+        $other_ids = get_posts( [
+            'post_type'      => 'post',
+            'post_status'    => 'any',
+            'posts_per_page' => -1,
+            'post__not_in'   => [ $post_id ],
+            'fields'         => 'ids',
+            'meta_key'       => '_escs_is_main_article',
+            'meta_value'     => 'yes',
+        ] );
+
+        foreach ( $other_ids as $other_id ) {
+            delete_post_meta( $other_id, '_escs_is_main_article' );
+        }
+    } else {
+        delete_post_meta( $post_id, '_escs_is_main_article' );
+    }
+
+    $updating = false;
+}
+add_action( 'save_post', 'escs_save_main_article_meta' );
 
 
 
