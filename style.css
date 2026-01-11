@@ -924,6 +924,17 @@ a:visited {
   font-weight: 400;
 }
 
+/* Author archive header name should match site font */
+.archive.author .digital-newspaper-container.digital-newspaper-author-section .author-name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 500;
+}
+
+/* Vertically center author header content (avatar + name/desc). */
+.archive.author .digital-newspaper-container.digital-newspaper-author-section .row {
+  align-items: center;
+}
+
 /* Hide authors for podcasts, videos, and fotografia sections on home. */
 .dlx-hide-content-authors .dlx-content-authors,
 .fotografia-main-banner .dlx-content-authors {
@@ -996,6 +1007,21 @@ a:visited {
   width: auto !important;
   max-width: none !important;
   flex: none !important;
+}
+
+/* Center pagination below the grid on archive/author pages. */
+body.archive .news-list-wrap .pagination {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+body.archive .news-list-wrap .pagination ul.page-numbers,
+body.archive .news-list-wrap .pagination .nav-links {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 /* Fotografia: 2 columns on archive grid */
@@ -1228,10 +1254,6 @@ a.white-font:visited {
 }
 
 /** AUTO COLLAPSE MENU WHEN WRAPS */
-#site-navigation.dlx-menu-collapsed {
-  position: relative;
-}
-
 #site-navigation.dlx-menu-collapsed .menu-toggle {
   background-color: transparent;
   display: flex;
@@ -1260,18 +1282,6 @@ a.white-font:visited {
   transform-origin: 0 0;
 }
 
-#site-navigation.dlx-menu-collapsed.toggled #digital_newspaper_menu_burger span:nth-child(1) {
-  transform: rotate(45deg) translate(1px, -1px);
-}
-
-#site-navigation.dlx-menu-collapsed.toggled #digital_newspaper_menu_burger span:nth-child(2) {
-  transform: scaleX(0);
-}
-
-#site-navigation.dlx-menu-collapsed.toggled #digital_newspaper_menu_burger span:nth-child(3) {
-  transform: rotate(-45deg) translate(1px, 0);
-}
-
 #site-navigation.dlx-menu-collapsed .menu_txt {
   position: absolute;
   width: 1px;
@@ -1292,75 +1302,6 @@ a.white-font:visited {
 #site-navigation.dlx-menu-collapsed.toggled ul.menu,
 #site-navigation.dlx-menu-collapsed.toggled ul.nav-menu {
   display: block;
-}
-
-#site-navigation.dlx-menu-collapsed .menu-header-menu-container {
-  float: none;
-  width: 100%;
-}
-
-#site-navigation.dlx-menu-collapsed ul.menu,
-#site-navigation.dlx-menu-collapsed ul.nav-menu {
-  background-color: var(--mobile-menu-bk-color);
-  z-index: 10;
-  position: absolute;
-  width: 100%;
-  left: 0;
-  padding: 10px 30px;
-}
-
-#site-navigation.dlx-menu-collapsed ul.menu li,
-#site-navigation.dlx-menu-collapsed ul.nav-menu li {
-  float: none;
-  border-top: 0;
-  position: relative;
-  border-bottom: 1px solid var(--mobile-menu-border-btm-color);
-}
-
-#site-navigation.dlx-menu-collapsed ul li.menu-item-has-children {
-  display: inline-block;
-  width: 100%;
-}
-
-#site-navigation.dlx-menu-collapsed ul.menu li:last-child,
-#site-navigation.dlx-menu-collapsed ul.nav-menu li:last-child {
-  border-bottom: none;
-}
-
-#site-navigation.dlx-menu-collapsed ul.menu li a,
-#site-navigation.dlx-menu-collapsed ul.nav-menu li a {
-  font-size: var(--menu-size-mobile);
-  font-weight: var(--menu-weight);
-  letter-spacing: var(--menu-letterspacing-mobile);
-  color: var(--menu-color);
-  font-family: var(--menu-family);
-  float: none;
-  display: block;
-  padding: 9px 0;
-  text-decoration: var(--menu-textdecoration-mobile);
-}
-
-#site-navigation.dlx-menu-collapsed.toggled ul>li .children,
-#site-navigation.dlx-menu-collapsed.toggled ul>li .sub-menu {
-  display: none;
-}
-
-#site-navigation.dlx-menu-collapsed .toggle-sub-menu,
-#site-navigation.dlx-menu-collapsed ul.menu .toggle-sub-menu,
-#site-navigation.dlx-menu-collapsed ul.nav-menu .toggle-sub-menu {
-  display: inline-block;
-}
-
-#site-navigation.dlx-menu-collapsed ul>li > .sub-menu.isShow,
-#site-navigation.dlx-menu-collapsed ul>li > .children.isShow {
-  display: block;
-}
-
-@media (min-width: 770px) {
-  #site-navigation:not(.dlx-menu-collapsed) ul.menu,
-  #site-navigation:not(.dlx-menu-collapsed) ul.nav-menu {
-    flex-wrap: nowrap;
-  }
 }
 
 /** MOBILE MENU BURGER COLOR (HOME + SELECTED CATEGORIES) */
@@ -1858,6 +1799,13 @@ body.category-fotografia,
 body.category-fotografia #page,
 body.category-fotografia .site {
   background-color: #171717;
+}
+
+/* Fotografia archive title: white text + border */
+body.category-fotografia .digital-newspaper-block-title.my-main-banner-title {
+  --section-title-color: #fff !important;
+  color: #fff !important;
+  border-bottom-color: #fff !important;
 }
 
 /* Fotografia list cards: white title + authors */

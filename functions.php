@@ -199,6 +199,64 @@ if ( ! function_exists( 'digital_newspaper_get_contrast_color' ) ) {
     }
 }
 
+if ( ! function_exists( 'dlx_normalize_posts_per_page' ) ) {
+    function dlx_normalize_posts_per_page( $count, $offset = 0, $multiple = 3 ) {
+        $count = (int) $count;
+        if ( $count <= 0 ) {
+            return $count;
+        }
+
+        $offset = max( 0, (int) $offset );
+        $multiple = max( 1, (int) $multiple );
+        $base = max( 0, $count - $offset );
+
+        if ( 0 === $base ) {
+            return $count;
+        }
+
+        $base = (int) ( ceil( $base / $multiple ) * $multiple );
+        if ( $base < $multiple ) {
+            $base = $multiple;
+        }
+
+        return $base + $offset;
+    }
+}
+
+
+if ( ! function_exists( 'dlx_force_multiple_of_three_in_archives' ) ) {
+    function dlx_force_multiple_of_three_in_archives( $query ) {
+        if ( is_admin() || ! $query->is_main_query() ) {
+            return;
+        }
+
+        if ( $query->is_archive() || $query->is_author() ) {
+            $ppp = $query->get( 'posts_per_page' );
+
+            if ( -1 === (int) $ppp ) {
+                return;
+            }
+
+            $ppp = (int) $ppp;
+            if ( $ppp <= 0 ) {
+                $ppp = (int) get_option( 'posts_per_page' );
+            }
+
+            if ( $ppp <= 0 ) {
+                $ppp = 10;
+            }
+
+            $offset = $query->is_category() ? 1 : 0;
+            $normalized = dlx_normalize_posts_per_page( $ppp, $offset, 3 );
+
+            if ( $normalized !== (int) $query->get( 'posts_per_page' ) ) {
+                $query->set( 'posts_per_page', $normalized );
+            }
+        }
+    }
+}
+add_action( 'pre_get_posts', 'dlx_force_multiple_of_three_in_archives', 999 );
+
 
 
 /***
@@ -532,7 +590,7 @@ if ( ! function_exists( 'digital_newspaper_single_related_posts' ) ) :
 
         // Build related posts query (4 posts now)
         $related_posts_args = [
-            'posts_per_page'      => 4,                  // ← 4 posts
+            'posts_per_page'      => 3,
             'post__not_in'        => [ get_the_ID() ],
             'ignore_sticky_posts' => true,
         ];
@@ -543,6 +601,12 @@ if ( ! function_exists( 'digital_newspaper_single_related_posts' ) ) :
 
         // Keep your existing filter hook
         $related_posts_args = apply_filters( 'digital_newspaper_query_args_filter', $related_posts_args );
+
+        if ( isset( $related_posts_args['posts_per_page'] ) ) {
+            $related_posts_args['posts_per_page'] = dlx_normalize_posts_per_page(
+                $related_posts_args['posts_per_page']
+            );
+        }
 
         $related_posts = new WP_Query( $related_posts_args );
 
